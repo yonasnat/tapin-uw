@@ -33,3 +33,5 @@ App.tsx – The root React component that ties everything together. It includes 
 /backend – (e.g., with Node.js or Firebase functions), this folder would include our server-side logic like API routes, database connections, or authentication logic.
 
 /docs – Planning materials like design wireframes, product specs, or meeting notes.
+
+Weekly Reports: https://docs.google.com/document/d/1iC9KicQdTowXv4BmYF74I4orOGh5hEf4HAeVGV9t0pc/edit?usp=sharing
