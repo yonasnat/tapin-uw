@@ -17,7 +17,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: tapin-uw/flutter_frontend
+        working-directory: flutter_frontend
     
     steps:
       - uses: actions/checkout@v4
@@ -34,7 +34,6 @@ jobs:
          channel: 'stable'
       - name: Install dependencies
         run: 
-          cd tapin-uw/flutter_frontend
           flutter pub get
 
       # Uncomment this step to verify the use of 'dart format' on each commit.
@@ -44,7 +43,6 @@ jobs:
       # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source
         run:
-          cd tapin-uw/flutter_frontend
           flutter analyze
 
       # Your project will need to have tests in test/ and a dependency on
@@ -52,5 +50,4 @@ jobs:
       # want to change this to 'flutter test'.
       - name: Run tests
         run: 
-          cd tapin-uw/flutter_frontend
           flutter test test/main_test.dart
