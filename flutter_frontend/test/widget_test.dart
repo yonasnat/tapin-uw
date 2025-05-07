@@ -27,4 +27,19 @@ void main() {
     expect(find.text('0'), findsNothing);
     expect(find.text('1'), findsOneWidget);
   });
+
+  // testing if the title passed into the home page is displayed properly in the appbar
+  testWidgets('AppBar displays the correct title', (WidgetTester tester) async {
+  const String testTitle = 'Test App Title';
+
+  await tester.pumpWidget(
+    const MaterialApp(
+      home: MyHomePage(title: testTitle),
+    ),
+  );
+
+  // Find the title text in the AppBar
+  expect(find.text(testTitle), findsOneWidget);
+});
+
 }
