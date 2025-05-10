@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'app.dart';
 
 
 class LoginScreen extends StatelessWidget {
@@ -97,6 +98,10 @@ class LoginScreen extends StatelessWidget {
                    ),
                    onPressed: () {
                      // TODO: add auth flow
+                     Navigator.pushReplacement(
+                       context,
+                       MaterialPageRoute(builder: (context) => const MainScreen()),
+                     );
                    },
                    child: const Text(
                      'Login',
