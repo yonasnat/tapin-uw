@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tapin/sign_up.dart';
 import 'app.dart';
 
 
@@ -128,6 +129,10 @@ class LoginScreen extends StatelessWidget {
                    ),
                    onPressed: () {
                      // TODO: go to sign‑up screen
+                    Navigator.pushReplacement(
+                       context,
+                       MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                    );
                    },
                    child: const Text(
                      'Create an Account',

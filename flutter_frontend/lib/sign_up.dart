@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tapin/app.dart';
 import 'package:tapin/explore_screen.dart';
 import 'package:tapin/login.dart';
 // import 'package:tapin/matchmaking_screen.dart';
@@ -130,7 +131,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       // Navigate to the Explore screen after successful sign-up
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const ExploreScreen()),
+        MaterialPageRoute(builder: (context) => const MainScreen()),
       );
     });
   }
