@@ -55,7 +55,7 @@ class _MainScreenState extends State<MainScreen> {
       ),
       body:
           <Widget>[
-            ExploreScreen(),
+            EventsPage(),
             const MatchmakingScreen(),
             const ProfileScreen(),
           ][currentPageIndex],
