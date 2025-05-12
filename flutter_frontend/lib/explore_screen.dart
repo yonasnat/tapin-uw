@@ -127,7 +127,7 @@ class _EventCard extends StatelessWidget {
                 children: tags
                     .map((t) => Chip(
                           label: Text(t),
-                          backgroundColor: Colors.white.withOpacity(.9),
+                          backgroundColor: Colors.white.withValues(alpha: 128),
                           labelStyle: const TextStyle(fontSize: 12, color: _navy),
                           side: const BorderSide(color: _navy, width: .5),
                           padding: const EdgeInsets.symmetric(horizontal: 6),

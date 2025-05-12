@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tapin/filter_screen.dart';
+import 'package:tapin/explore_screen.dart';
+// import 'package:tapin/login.dart';
+// import 'package:tapin/matchmaking_screen.dart';
+import 'package:tapin/profile_screen.dart';
+
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -18,8 +22,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   // Controllers for text fields
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
@@ -104,12 +107,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 foregroundColor: _black, // Button text color
               ),
               onPressed: _isLoading ? null : _signUp,
-              child:
-                  _isLoading
-                      ? const CircularProgressIndicator(
-                        color: _black,
-                      ) // Loading spinner color
-                      : const Text('Sign Up'),
+              child: _isLoading
+                  ? const CircularProgressIndicator(color: _black) // Loading spinner color
+                  : const Text('Sign Up'),
             ),
           ],
         ),
@@ -128,11 +128,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _isLoading = false;
       });
 
-      // Navigate to the Explore screen after successful sign-up
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const FilterScreen()),
-      );
+      // Navigate to the Explore Screen after successful sign-up
+      if (!mounted) return; // Ensure the widget is still in the tree
+      if (mounted) {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
+      }
     });
   }
 }
