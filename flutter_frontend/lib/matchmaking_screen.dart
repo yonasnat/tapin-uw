@@ -23,19 +23,20 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
             child: Column(
               children: [
                 // Photo Here
-                Container(
-                  height: 300,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                ),
+                // Container(
+                //   height: 300,
+                //   decoration: BoxDecoration(
+                //     color: Colors.white,
+                //     borderRadius: BorderRadius.circular(12.0),
+                //   ),
+                // ),
+                // Image.asset('assets/images/blank_profile_picture.png', width: 300, height: 300),
                 SizedBox(height: 15),
                 // User First Name, Last Name
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'First Last',
+                    'John Doe',
                     style: TextStyle(
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
@@ -46,7 +47,7 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
                 // User Bio
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Text('Bio Here', style: TextStyle(fontSize: 16)),
+                  child: Text('Hi! I am a student at the University of Washington studying computer science. I enjoy hanging out with my friends and meeting new people!', style: TextStyle(fontSize: 16)),
                 ),
                 SizedBox(height: 5),
                 // Interests List
@@ -56,9 +57,9 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Pull list of interests from backend
-                      Text('- Interest 1', style: TextStyle(fontSize: 16)),
-                      Text('- Interest 2', style: TextStyle(fontSize: 16)),
-                      Text('- Interest 3', style: TextStyle(fontSize: 16)),
+                      Text('- Programming', style: TextStyle(fontSize: 16)),
+                      Text('- Hiking', style: TextStyle(fontSize: 16)),
+                      Text('- Photography', style: TextStyle(fontSize: 16)),
                     ],
                   ),
                 ),
