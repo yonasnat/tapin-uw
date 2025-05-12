@@ -126,3 +126,93 @@ exports.createUser = onRequest(async (request, response) => {
     }
   }
 });
+
+/**
+ * Authenticates a user and returns their data
+ * Required fields in request body:
+ * - email: string
+ * - password: string
+ */
+exports.login = onRequest(async (request, response) => {
+  // Only allow POST requests
+  if (request.method !== "POST") {
+    response.status(405).send("Method Not Allowed");
+    return;
+  }
+
+  try {
+    const {email, password} = request.body;
+
+    // Validate required fields
+    if (!email || !password) {
+      response.status(400).send({
+        error: "Missing required fields",
+        message: "Email and password are required",
+      });
+      return;
+    }
+
+    // Sign in the user with Firebase Auth to validate credentials
+    const auth = admin.auth();
+    const userCredential = await auth.signInWithEmailAndPassword(email, password);
+
+    // Get the user's data from Firestore
+    const userDoc = await admin.firestore()
+        .collection("users")
+        .doc(userCredential.user.uid)
+        .get();
+
+    if (!userDoc.exists) {
+      response.status(404).send({
+        error: "User not found",
+        message: "User data not found in database",
+      });
+      return;
+    }
+
+    // Create a custom token for the client
+    const customToken = await auth.createCustomToken(userCredential.user.uid);
+
+    // Return success response with user data and token
+    response.status(200).send({
+      message: "Login successful",
+      user: {
+        uid: userCredential.user.uid,
+        email: userCredential.user.email,
+        displayName: userCredential.user.displayName,
+        ...userDoc.data(),
+      },
+      token: customToken,
+    });
+  } catch (error) {
+    logger.error("Error during login:", error);
+    
+    // Handle specific error cases
+    if (error.code === "auth/user-not-found") {
+      response.status(404).send({
+        error: "User not found",
+        message: "No user found with this email",
+      });
+    } else if (error.code === "auth/wrong-password") {
+      response.status(401).send({
+        error: "Invalid credentials",
+        message: "Invalid email or password",
+      });
+    } else if (error.code === "auth/invalid-email") {
+      response.status(400).send({
+        error: "Invalid email",
+        message: "The provided email is invalid",
+      });
+    } else if (error.code === "auth/user-disabled") {
+      response.status(403).send({
+        error: "Account disabled",
+        message: "This account has been disabled",
+      });
+    } else {
+      response.status(500).send({
+        error: "Internal server error",
+        message: "An error occurred during login",
+      });
+    }
+  }
+});
