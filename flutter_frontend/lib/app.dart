@@ -35,7 +35,7 @@ class _MainScreenState extends State<MainScreen> {
             currentPageIndex = index;
           });
         },
-        indicatorColor: Colors.green,
+        indicatorColor: Color(0xFFE9C983),
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(
