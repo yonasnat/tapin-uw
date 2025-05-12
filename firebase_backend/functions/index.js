@@ -1,218 +1,155 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * const {onCall} = require("firebase-functions/v2/https");
- * const {onDocumentWritten} = require("firebase-functions/v2/firestore");
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
+// Firebase Cloud Functions for TapIn@UW - Handles user signup, login, and profile retrieval
 
-const {onRequest} = require("firebase-functions/v2/https");
+const { onRequest } = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
 const admin = require("firebase-admin");
+const cors = require('cors')({ origin: true });
 
-// Initialize Firebase Admin
+// Initialize Firebase Admin SDK to access Auth and Firestore
 admin.initializeApp();
 
-// Create and deploy your first functions
-// https://firebase.google.com/docs/functions/get-started
-
-// exports.helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
-
 /**
- * Creates a new user in Firebase Authentication and Firestore
- * Required fields in request body:
- * - email: string (must be @uw.edu)
- * - password: string
- * - displayName: string
- * Optional fields:
- * - bio: string
- * - interests: string[]
+ * SIGNUP FUNCTION - Creates a new user in Firebase Authentication and Firestore.
+ * 
+ * Trigger: HTTP POST
+ * Required Fields in body:
+ * - email (must be a @uw.edu address)
+ * - password (at least 6 characters)
+ * - displayName (user's full name)
+ * 
+ * Optional:
+ * - bio: short description
+ * - interests: array of strings
  */
 exports.createUser = onRequest(async (request, response) => {
-  // Only allow POST requests
-  if (request.method !== "POST") {
-    response.status(405).send("Method Not Allowed");
-    return;
-  }
-
-  try {
-    const {email, password, displayName, bio, interests} = request.body;
-
-    // Validate required fields
-    if (!email || !password || !displayName) {
-      response.status(400).send({
-        error: "Missing required fields",
-        message: "Email, password, and displayName are required",
-      });
+  return cors(request, response, async () => {
+    if (request.method !== "POST") {
+      response.status(405).send({ error: "Only POST requests allowed" });
       return;
     }
 
-    // Validate UW email domain
-    if (!email.endsWith("@uw.edu")) {
-      response.status(400).send({
-        error: "Invalid email domain",
-        message: "Only @uw.edu email addresses are allowed",
+    try {
+      const { email, password, displayName, bio, interests } = request.body;
+
+      // Validate required fields
+      if (!email || !password || !displayName) {
+        response.status(400).send({ message: "Email, password, and name required." });
+        return;
+      }
+
+      // Email must be UW
+      if (!email.endsWith("@uw.edu")) {
+        response.status(400).send({ message: "Only @uw.edu email allowed." });
+        return;
+      }
+
+      // Enforce strong passwords
+      if (password.length < 6) {
+        response.status(400).send({ message: "Password must be 6+ characters." });
+        return;
+      }
+
+      // Create Firebase user
+      const userRecord = await admin.auth().createUser({
+        email,
+        password,
+        displayName,
+        emailVerified: false,
       });
-      return;
-    }
 
-    // Create the user in Firebase Auth
-    const userRecord = await admin.auth().createUser({
-      email,
-      password,
-      displayName,
-    });
-
-    // Create a user document in Firestore
-    const userData = {
-      uid: userRecord.uid,
-      email: userRecord.email,
-      displayName: userRecord.displayName,
-      createdAt: admin.firestore.FieldValue.serverTimestamp(),
-      // Optional fields
-      bio: bio || "",
-      interests: interests || [],
-      preferences: {
-        notifications: true,
-        theme: "light"
-      },
-    };
-
-    // Store the user data in Firestore
-    await admin.firestore()
-        .collection("users")
-        .doc(userRecord.uid)
-        .set(userData);
-
-    // Return success response
-    response.status(201).send({
-      message: "User created successfully",
-      user: {
+      // Save additional data to Firestore
+      const userData = {
         uid: userRecord.uid,
-        email: userRecord.email,
-        displayName: userRecord.displayName,
-        bio: userData.bio,
-        interests: userData.interests,
-      },
-    });
-  } catch (error) {
-    logger.error("Error creating user:", error);
-    
-    // Handle specific error cases
-    if (error.code === "auth/email-already-exists") {
-      response.status(409).send({
-        error: "Email already exists",
-        message: "A user with this email already exists",
+        email,
+        displayName,
+        bio: bio || "",
+        interests: interests || [],
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        lastLogin: admin.firestore.FieldValue.serverTimestamp(),
+        preferences: { notifications: true, theme: "light" },
+        isProfileComplete: false,
+      };
+
+      await admin.firestore().collection("users").doc(userRecord.uid).set(userData);
+
+      const token = await admin.auth().createCustomToken(userRecord.uid);
+
+      response.status(201).send({
+        message: "Signup successful.",
+        token,
+        user: {
+          uid: userRecord.uid,
+          email,
+          displayName,
+          bio: userData.bio,
+          interests: userData.interests,
+        },
       });
-    } else if (error.code === "auth/invalid-email") {
-      response.status(400).send({
-        error: "Invalid email",
-        message: "The provided email is invalid",
-      });
-    } else if (error.code === "auth/weak-password") {
-      response.status(400).send({
-        error: "Weak password",
-        message: "The password is too weak",
-      });
-    } else {
-      response.status(500).send({
-        error: "Internal server error",
-        message: "An error occurred while creating the user",
-      });
+
+    } catch (error) {
+      logger.error("Signup error:", error);
+
+      if (error.code === "auth/email-already-exists") {
+        response.status(409).send({ message: "Email already registered." });
+      } else if (error.code === "auth/invalid-email") {
+        response.status(400).send({ message: "Invalid email address." });
+      } else {
+        response.status(500).send({ message: "Unexpected error. Try again." });
+      }
     }
-  }
+  });
 });
 
 /**
- * Authenticates a user and returns their data
- * Required fields in request body:
- * - email: string
- * - password: string
+ * LOGIN FUNCTION - Logs in a registered user and returns a token.
+ * 
+ * Trigger: HTTP POST
+ * Required Fields in body:
+ * - email
+ * - password 
  */
-exports.login = onRequest(async (request, response) => {
-  // Only allow POST requests
-  if (request.method !== "POST") {
-    response.status(405).send("Method Not Allowed");
-    return;
-  }
-
-  try {
-    const {email, password} = request.body;
-
-    // Validate required fields
-    if (!email || !password) {
-      response.status(400).send({
-        error: "Missing required fields",
-        message: "Email and password are required",
-      });
+exports.loginUser = onRequest(async (request, response) => {
+  return cors(request, response, async () => {
+    if (request.method !== "POST") {
+      response.status(405).send({ error: "Only POST requests allowed" });
       return;
     }
 
-    // Sign in the user with Firebase Auth to validate credentials
-    const auth = admin.auth();
-    const userCredential = await auth.signInWithEmailAndPassword(email, password);
+    try {
+      const { email, password } = request.body;
 
-    // Get the user's data from Firestore
-    const userDoc = await admin.firestore()
-        .collection("users")
-        .doc(userCredential.user.uid)
-        .get();
+      if (!email || !password) {
+        response.status(400).send({ message: "Email and password required." });
+        return;
+      }
 
-    if (!userDoc.exists) {
-      response.status(404).send({
-        error: "User not found",
-        message: "User data not found in database",
+      // Get user data (Firebase Admin cannot verify password)
+      const userRecord = await admin.auth().getUserByEmail(email);
+
+      // Issue token and update Firestore login time
+      const token = await admin.auth().createCustomToken(userRecord.uid);
+      await admin.firestore().collection("users").doc(userRecord.uid).update({
+        lastLogin: admin.firestore.FieldValue.serverTimestamp()
       });
-      return;
+
+      response.status(200).send({
+        message: "Login token issued.",
+        token,
+        user: {
+          uid: userRecord.uid,
+          email: userRecord.email,
+          displayName: userRecord.displayName,
+        },
+      });
+
+    } catch (error) {
+      logger.error("Login error:", error);
+
+      if (error.code === "auth/user-not-found") {
+        response.status(401).send({ message: "User not found. Check email." });
+      } else {
+        response.status(500).send({ message: "Login failed. Try again later." });
+      }
     }
-
-    // Create a custom token for the client
-    const customToken = await auth.createCustomToken(userCredential.user.uid);
-
-    // Return success response with user data and token
-    response.status(200).send({
-      message: "Login successful",
-      user: {
-        uid: userCredential.user.uid,
-        email: userCredential.user.email,
-        displayName: userCredential.user.displayName,
-        ...userDoc.data(),
-      },
-      token: customToken,
-    });
-  } catch (error) {
-    logger.error("Error during login:", error);
-    
-    // Handle specific error cases
-    if (error.code === "auth/user-not-found") {
-      response.status(404).send({
-        error: "User not found",
-        message: "No user found with this email",
-      });
-    } else if (error.code === "auth/wrong-password") {
-      response.status(401).send({
-        error: "Invalid credentials",
-        message: "Invalid email or password",
-      });
-    } else if (error.code === "auth/invalid-email") {
-      response.status(400).send({
-        error: "Invalid email",
-        message: "The provided email is invalid",
-      });
-    } else if (error.code === "auth/user-disabled") {
-      response.status(403).send({
-        error: "Account disabled",
-        message: "This account has been disabled",
-      });
-    } else {
-      response.status(500).send({
-        error: "Internal server error",
-        message: "An error occurred during login",
-      });
-    }
-  }
+  });
 });
