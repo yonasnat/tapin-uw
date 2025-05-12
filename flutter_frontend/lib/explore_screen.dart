@@ -62,7 +62,7 @@ class EventsPage extends StatelessWidget {
           );
         },
       ),
-      bottomNavigationBar: _SimpleNavBar(currentIndex: 0),
+      // bottomNavigationBar: _SimpleNavBar(currentIndex: 0),
     );
   }
 }
@@ -155,33 +155,6 @@ class _EventCard extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-// ─── Minimal Bottom Navigation (placeholder) ─────────────────────────
-class _SimpleNavBar extends StatelessWidget {
-  const _SimpleNavBar({required this.currentIndex});
-
-  final int currentIndex;
-
-  static const _uwPurple = EventsPage._uwPurple;
-  static const _navy     = EventsPage._navy;
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: currentIndex,
-      selectedItemColor: _uwPurple,
-      unselectedItemColor: _navy.withOpacity(.6),
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Events'),
-        BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Match'),
-      ],
-      onTap: (i) {
-        // TODO: implement navigation logic
-      },
     );
   }
 }
