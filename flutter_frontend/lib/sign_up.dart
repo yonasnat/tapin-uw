@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tapin/explore_screen.dart';
-// import 'package:tapin/login.dart';
-// import 'package:tapin/matchmaking_screen.dart';
-import 'package:tapin/profile_screen.dart';
+import 'package:tapin/filter_screen.dart';
 
 
 class SignUpScreen extends StatefulWidget {
@@ -128,10 +125,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _isLoading = false;
       });
 
-      // Navigate to the Explore Screen after successful sign-up
+      // Navigate to the Filter Screen after successful sign-up
       if (!mounted) return; // Ensure the widget is still in the tree
       if (mounted) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FilterScreen()));
       }
     });
   }
