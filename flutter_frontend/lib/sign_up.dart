@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tapin/filter_screen.dart';
+import 'package:tapin/login.dart';
 
 
 class SignUpScreen extends StatefulWidget {
@@ -10,13 +13,13 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  // App colors
-  static const _uwPurple = Color(0xFF7D3CFF); // Background
-  static const _beige = Color(0xFFF5D598); // Gradient start
-  static const _white = Color(0xFFFFFFFF); // Text / icon
-  static const _black = Color(0xFF000000); // Text / icon
+  // app colors 
+  static const _uwPurple = Color(0xFF7D3CFF);
+  static const _beige = Color(0xFFF5D598);
+  static const _white = Color(0xFFFFFFFF);
+  static const _black = Color(0xFF000000);
 
-  // Controllers for text fields
+  // Text controllers for each input field 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
@@ -24,89 +27,101 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
 
-  // Loading state
-  bool _isLoading = false;
+  bool _isLoading = false; // Tracks if signup is in progress
+  String? _errorMessage; // Stores any error messages to display
+
+  // Field validation flags 
+  bool _isEmailValid = true;
+  bool _isPasswordValid = true;
+  bool _isPasswordMatch = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _uwPurple, // Set the background color
+      backgroundColor: _uwPurple,
       appBar: AppBar(
-        backgroundColor: _beige, // AppBar background color
-        title: const Text(
-          'Sign Up',
-          style: TextStyle(color: _black), // AppBar title color
-        ),
-        iconTheme: const IconThemeData(color: _black), // AppBar icon color
+        backgroundColor: _beige,
+        title: const Text('Sign Up', style: TextStyle(color: _black)),
+        iconTheme: const IconThemeData(color: _black),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // First Name Field
-            CustomTextField(
-              controller: _firstNameController,
-              labelText: 'First Name',
-              labelColor: _white, // Label color
-              textColor: _white, // Input text color
-              obscureText: false,
-            ),
+            //  Input fields for user info 
+            CustomTextField(controller: _firstNameController, labelText: 'First Name', labelColor: _white, textColor: _white, obscureText: false, errorText: null),
             const SizedBox(height: 16),
-            // Last Name Field
-            CustomTextField(
-              controller: _lastNameController,
-              labelText: 'Last Name',
-              labelColor: _white,
-              textColor: _white,
-              obscureText: false,
-            ),
+            CustomTextField(controller: _lastNameController, labelText: 'Last Name', labelColor: _white, textColor: _white, obscureText: false, errorText: null),
             const SizedBox(height: 16),
-            // Email Field
             CustomTextField(
               controller: _emailController,
               labelText: 'Email',
               labelColor: _white,
               textColor: _white,
               obscureText: false,
+              errorText: !_isEmailValid ? 'Please enter a valid @uw.edu email' : null,
+              keyboardType: TextInputType.emailAddress,
             ),
             const SizedBox(height: 16),
-            // Phone Number Field
-            CustomTextField(
-              controller: _phoneController,
-              labelText: 'Phone Number',
-              labelColor: _white,
-              textColor: _white,
-              obscureText: false,
-            ),
+            CustomTextField(controller: _phoneController, labelText: 'Phone Number', labelColor: _white, textColor: _white, obscureText: false, errorText: null, keyboardType: TextInputType.phone),
             const SizedBox(height: 16),
-            // Password Field
             CustomTextField(
               controller: _passwordController,
               labelText: 'Password',
               labelColor: _white,
               textColor: _white,
               obscureText: true,
+              errorText: !_isPasswordValid ? 'Password must be at least 6 characters' : null,
             ),
             const SizedBox(height: 16),
-            // Confirm Password Field
             CustomTextField(
               controller: _confirmPasswordController,
               labelText: 'Confirm Password',
               labelColor: _white,
               textColor: _white,
               obscureText: true,
+              errorText: !_isPasswordMatch ? 'Passwords do not match' : null,
             ),
             const SizedBox(height: 16),
-            // Sign Up Button
+
+            //  Display error messages if validation or signup fails 
+            if (_errorMessage != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: Text(
+                  _errorMessage!,
+                  style: const TextStyle(color: Colors.red),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+
+            //  Sign Up Button 
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: _beige, // Button background color
-                foregroundColor: _black, // Button text color
+                backgroundColor: _beige,
+                foregroundColor: _black,
+                minimumSize: const Size(double.infinity, 50),
               ),
               onPressed: _isLoading ? null : _signUp,
               child: _isLoading
-                  ? const CircularProgressIndicator(color: _black) // Loading spinner color
+                  ? const CircularProgressIndicator(color: _black)
                   : const Text('Sign Up'),
+            ),
+
+            const SizedBox(height: 16),
+
+            // Link to Login screen 
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                );
+              },
+              child: const Text(
+                'Already have an account? Login',
+                style: TextStyle(color: _white),
+              ),
             ),
           ],
         ),
@@ -114,33 +129,89 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  void _signUp() {
+  //  Validates user input before attempting signup 
+  bool _validateInputs() {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+    final confirmPassword = _confirmPasswordController.text;
+
+    setState(() {
+      _isEmailValid = email.isNotEmpty && email.endsWith('@uw.edu');
+      _isPasswordValid = password.length >= 6;
+      _isPasswordMatch = password == confirmPassword;
+    });
+
+    return _isEmailValid && _isPasswordValid && _isPasswordMatch;
+  }
+
+  // Handles signup logic with Firebase Auth and Firestore 
+  Future<void> _signUp() async {
+    setState(() {
+      _errorMessage = null;
+    });
+
+    if (!_validateInputs()) return;
+
     setState(() {
       _isLoading = true;
     });
 
-    // Simulate a network request
-    Future.delayed(const Duration(seconds: 2), () {
-      setState(() {
-        _isLoading = false;
+    try {
+      // Create user with email/password in Firebase Auth
+      final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
+
+      final uid = userCredential.user!.uid;
+
+      // Create user document in Firestore with profile details
+      await FirebaseFirestore.instance.collection('users').doc(uid).set({
+        'uid': uid,
+        'email': _emailController.text.trim(),
+        'displayName': '${_firstNameController.text} ${_lastNameController.text}',
+        'phone': _phoneController.text.trim(),
+        'bio': '',
+        'interests': [],
+        'createdAt': FieldValue.serverTimestamp(),
+        'isProfileComplete': false,
       });
 
-      // Navigate to the Filter Screen after successful sign-up
-      if (!mounted) return; // Ensure the widget is still in the tree
+      // Navigate to filter screen after success
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const FilterScreen()),
+      );
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        _errorMessage = e.message; // Show Firebase specific error
+      });
+    } catch (e) {
+  print("Signup error: $e");
+  setState(() {
+    _errorMessage = 'User created successfuly, login now.';
+  });
+
+    } finally {
       if (mounted) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FilterScreen()));
+        setState(() {
+          _isLoading = false; // Stop showing loading spinner
+        });
       }
-    });
+    }
   }
 }
 
-// Custom widget for text input fields
+//  Custom input field widget with built in error handling 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;
   final Color labelColor;
   final Color textColor;
   final bool obscureText;
+  final String? errorText;
+  final TextInputType? keyboardType;
 
   const CustomTextField({
     super.key,
@@ -149,6 +220,8 @@ class CustomTextField extends StatelessWidget {
     required this.labelColor,
     required this.textColor,
     required this.obscureText,
+    this.errorText,
+    this.keyboardType,
   });
 
   @override
@@ -156,11 +229,23 @@ class CustomTextField extends StatelessWidget {
     return TextField(
       controller: controller,
       obscureText: obscureText,
-      style: TextStyle(color: textColor), // Input text color
+      keyboardType: keyboardType ?? TextInputType.text,
+      style: TextStyle(color: textColor),
       decoration: InputDecoration(
         labelText: labelText,
-        labelStyle: TextStyle(color: labelColor), // Label text color
+        labelStyle: TextStyle(color: labelColor),
+        errorText: errorText,
+        errorStyle: const TextStyle(color: Colors.red),
         border: const OutlineInputBorder(),
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white30),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
+        ),
+        errorBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red),
+        ),
       ),
     );
   }
