@@ -247,5 +247,3 @@ class CustomTextField extends StatelessWidget {
     );
   }
 }
-  }
-}
