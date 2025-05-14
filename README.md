@@ -35,3 +35,27 @@ App.tsx – The root React component that ties everything together. It includes 
 /docs – Planning materials like design wireframes, product specs, or meeting notes.
 
 Weekly Reports: https://docs.google.com/document/d/1iC9KicQdTowXv4BmYF74I4orOGh5hEf4HAeVGV9t0pc/edit?usp=sharing
+
+Set Up Instructions:
+1. Download the project
+2. Open Terminal
+3. If Firebase is not downloaded on Mac:
+   a. Run: curl -sL https://firebase.tools | bash
+   b. Follow instructions to create an account and setup Firebase 
+4. Run: cd flutter_frontend
+5. Run: flutter pub get
+6. Run: firebase login
+7. Run: dart pub global activate flutterfire_cli
+8. Note the export path (e.g., export PATH="$PATH:$HOME/.pub-cache/bin") at the end
+9. Run: nano ~/.zshrc
+10. Add the export path (e.g., export PATH="$PATH:$HOME/.pub-cache/bin") in the file
+11. Save and exit nano
+12. Run: source ~/.zshrc
+13. Run: flutterfire --version
+14. Run: flutterfire configure
+15. Select: tapin-uw (TapIn-UW)
+16. Select: web (for which configuration to configure with)
+17. Run: flutter run
+18. Select: [3] Chrome
+
+![image](https://github.com/user-attachments/assets/417a492b-f662-4deb-b877-e31f60dc242b)
