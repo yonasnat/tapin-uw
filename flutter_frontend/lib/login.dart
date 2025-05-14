@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tapin/sign_up.dart';
 import 'package:tapin/profile_screen.dart'; 
+import 'package:tapin/filter_screen.dart';
 import 'app.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -152,7 +153,7 @@ class LoginScreen extends StatelessWidget {
       // Navigate to Profile screen 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const MainScreen()),
+        MaterialPageRoute(builder: (context) => const FilterScreen()),
       );
     } on FirebaseAuthException catch (e) {
       // Show a helpful error message based on Firebase's response
