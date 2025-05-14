@@ -63,3 +63,8 @@ Set Up Instructions*:
 19. Select: [3] Chrome
 
 *An invitation is required to access the Firebase, Melanie (Our TA) has been invited.
+
+Operation Use Case(s):
+1. User account creation with UW credentials
+2. User account log in (after account creation)
+
