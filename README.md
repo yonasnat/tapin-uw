@@ -38,8 +38,9 @@ Weekly Reports: https://docs.google.com/document/d/1iC9KicQdTowXv4BmYF74I4orOGh5
 
 Set Up Instructions*:
 1. Download the project
-2. Open Terminal
-3. If Firebase is not downloaded on Mac:
+2. Open the project in an IDE (VS Code is best)
+3. Open Terminal
+4. If Firebase is not downloaded on Mac:
 
    a. Run: curl -sL https://firebase.tools | bash
 
