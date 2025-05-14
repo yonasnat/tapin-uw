@@ -36,7 +36,7 @@ App.tsx – The root React component that ties everything together. It includes 
 
 Weekly Reports: https://docs.google.com/document/d/1iC9KicQdTowXv4BmYF74I4orOGh5hEf4HAeVGV9t0pc/edit?usp=sharing
 
-Set Up Instructions:
+Set Up Instructions*:
 1. Download the project
 2. Open Terminal
 3. If Firebase is not downloaded on Mac:
@@ -60,3 +60,5 @@ Set Up Instructions:
 17. Select: web (for which configuration to configure with)
 18. Run: flutter run
 19. Select: [3] Chrome
+
+*An invitation is required to access the Firebase, Melanie (Our TA) has been invited.
