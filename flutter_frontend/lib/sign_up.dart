@@ -179,8 +179,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
         // Parse the response
         final responseData = jsonDecode(response.body);
         
-        // Sign in with the custom token
-        await FirebaseAuth.instance.signInWithCustomToken(responseData['token']);
+        if (responseData['token'] != null) {
+          // Sign in with the custom token if available
+          await FirebaseAuth.instance.signInWithCustomToken(responseData['token']);
+        } else {
+          // If no token, sign in with email/password
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: _emailController.text.trim(),
+            password: _passwordController.text,
+          );
+        }
 
         // Navigate to filter screen after success
         if (!mounted) return;
