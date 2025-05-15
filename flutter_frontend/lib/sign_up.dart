@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:tapin/filter_screen.dart';
 import 'package:tapin/login.dart';
 
@@ -157,46 +159,51 @@ class _SignUpScreenState extends State<SignUpScreen> {
     });
 
     try {
-      // Create user with email/password in Firebase Auth
-      final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text,
-      );
-
-      final uid = userCredential.user!.uid;
-
-      // Create user document in Firestore with profile details
-      await FirebaseFirestore.instance.collection('users').doc(uid).set({
-        'uid': uid,
+      // Prepare the request body
+      final requestBody = {
         'email': _emailController.text.trim(),
+        'password': _passwordController.text,
         'displayName': '${_firstNameController.text} ${_lastNameController.text}',
-        'phone': _phoneController.text.trim(),
         'bio': '',
         'interests': [],
-        'createdAt': FieldValue.serverTimestamp(),
-        'isProfileComplete': false,
-      });
+      };
 
-      // Navigate to filter screen after success
-      if (!mounted) return;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const FilterScreen()),
+      // Make HTTP request to the cloud function
+      final response = await http.post(
+        Uri.parse('https://createuser-ybcbaxrbca-uc.a.run.app'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(requestBody),
       );
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        _errorMessage = e.message; // Show Firebase specific error
-      });
-    } catch (e) {
-  print("Signup error: $e");
-  setState(() {
-    _errorMessage = 'User created successfuly, login now.';
-  });
 
+      if (response.statusCode == 201) {
+        // Parse the response
+        final responseData = jsonDecode(response.body);
+        
+        // Sign in with the custom token
+        await FirebaseAuth.instance.signInWithCustomToken(responseData['token']);
+
+        // Navigate to filter screen after success
+        if (!mounted) return;
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const FilterScreen()),
+        );
+      } else {
+        // Handle error response
+        final errorData = jsonDecode(response.body);
+        setState(() {
+          _errorMessage = errorData['message'] ?? 'Signup failed. Please try again.';
+        });
+      }
+    } catch (e) {
+      print("Signup error: $e");
+      setState(() {
+        _errorMessage = 'An error occurred during signup. Please try again.';
+      });
     } finally {
       if (mounted) {
         setState(() {
-          _isLoading = false; // Stop showing loading spinner
+          _isLoading = false;
         });
       }
     }
