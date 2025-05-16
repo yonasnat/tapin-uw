@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "776637259567",
+    "project_id": "tapin-uw",
+    "storage_bucket": "tapin-uw.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:776637259567:android:41935c07b9d39cd9f24bda",
+        "android_client_info": {
+          "package_name": "com.tapin.tapin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoOu3Zx7n91vshCLRGl-wnyNgt8KgIsCE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
