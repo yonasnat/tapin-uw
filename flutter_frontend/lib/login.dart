@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tapin/sign_up.dart';
-import 'package:tapin/profile_screen.dart'; 
 import 'package:tapin/filter_screen.dart';
-import 'app.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
