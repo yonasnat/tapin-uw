@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tapin/login.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -15,6 +16,19 @@ class ProfileScreen extends StatelessWidget {
       backgroundColor: _uwPurple, // Set the background color
       appBar: AppBar(
         backgroundColor: _beige, // AppBar background color
+        // add logout button
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              // Handle logout action
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+                ); 
+            },
+          ),
+        ],
         title: const Text(
           'Profile',
           style: TextStyle(color: _black), // AppBar title color
