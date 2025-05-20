@@ -2,8 +2,48 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if false;
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isEventOrganizer(eventId) {
+      return isAuthenticated() && 
+        get(/databases/$(database)/documents/events/$(eventId)).data.organizerId == request.auth.uid;
+    }
+
+    // Users collection rules
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      allow update: if isOwner(userId);
+      allow delete: if isOwner(userId);
+    }
+
+    // Events collection rules
+    match /events/{eventId} {
+      // Anyone can read events
+      allow read: if true;
+      
+      // Only authenticated users can create events
+      allow create: if isAuthenticated() && 
+        request.resource.data.organizerId == request.auth.uid;
+      
+      // Only event organizers can update event details
+      allow update: if isEventOrganizer(eventId);
+      
+      // Only event organizers can delete events
+      allow delete: if isEventOrganizer(eventId);
+      
+      // Subcollection for event participants
+      match /participants/{userId} {
+        allow read: if true;
+        allow write: if isAuthenticated() && request.auth.uid == userId;
+      }
     }
   }
 }
