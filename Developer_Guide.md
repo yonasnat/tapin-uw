@@ -77,8 +77,8 @@ flutter build web
 ```bash
 flutter analyze
 ```
-Confirm version increment in pubspec.yaml
-Manually test: login, signup, explore, profile, match, messaging (if complete)
+- Confirm version increment in pubspec.yaml
+- Manually test: login, signup, explore, profile, match, messaging (if complete)
 
 ### Backend(Firebase Functions)
 Login & configure project
@@ -100,7 +100,7 @@ firebase functions:log
 ```
 
 ### Production Readiness Check
-Confirm Firestore security rules are enforced
-Restrict write access to verified users only
+- Confirm Firestore security rules are enforced
+- Restrict write access to verified users only
 
 
