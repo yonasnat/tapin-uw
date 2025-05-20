@@ -1,14 +1,17 @@
-2. Write user documentation (30%)
-Your public repository must contain a complete user manual. Anyone looking at your repository should be able to easily find the user manual. The user manual is focused solely on people who want to use your project.
-The user manual should describe the functionality of your project as you expect it to be at the end of the quarter. For this assignment, indicate missing functionality as work in progress.
-The user documentation should include at least the following information:
-A high-level description. What does the system do and why would a user want to use it. -Nathnael
-Tapin@UW is a mobile app tailored for University of Washington students, alumni, and faculty to make meaningful social and academic connections. The app supports: 
-Discovering and posting campus events
-Finding friends or study groups through matchmaking
-Engaging in direct messaging
-Browsing personalized content based on interests and courses
-Tapin promotes community building by filtering content to match user interests, offering a safer and more purposeful networking space. Users would want to use it to find relevant events, make new friends, and share their own meetups or club gatherings in a verified, UW specific environment. 
+# TapIn@UW – User Manual
+
+Welcome to TapIn@UW, a mobile app tailored for University of Washington students, alumni, and faculty to make meaningful social and academic connections.
+
+# High-Level Description
+
+TapIn@UW enables users to:
+- Discover and post campus events
+- Match with students based on shared interests and courses
+- Directly message others
+- Browse a personalized feed tailored to their academic and social preferences
+
+By offering a verified UW-only platform, TapIn@UW fosters a safer and more intentional environment for students to make friends, share meetups, and participate in UW community events.
+
 How to install the software. If your system has prerequisites (e.g., tools, libraries, emulators, third-party applications, etc.), your instructions should list all of them and indicate how to install and configure them. Make sure to indicate what specific version requirements these prerequisites must satisfy. If running the system requires the installation of, e.g., a virtual machine, a database, or an emulator, make sure to provide clear step-by-step instructions. - Thomas
 Download the project
 If Flutter is not downloaded on Mac:
