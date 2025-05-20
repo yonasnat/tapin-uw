@@ -59,32 +59,48 @@ void main() {
     expect(3 + 5, equals(8));
   });
 }
-How to build a release of the software. Describe any tasks that are not automated. For example, should a developer update a version number (in code and documentation) prior to invoking the build system? Are there any sanity checks a developer should perform after building a release? - Nathnael
-Frontend(Flutter)
-Make sure all dependencies are installed and up to date:
-Flutter pub get
-Flutter pub upgrade –major-versions
-Build the release version for target platform for web:
-Flutter build web
-Manual steps before publishing
-Confirm the app launches successfully on devices
-Test all flows: login, profile setup, posting, messaging
-Use Flutter linter to catch any potential issues: flutter analyze
-Update Version Number:
-In pubspec.yaml, increment the version
-Backend(Firebase)
-Login to Firebase CLI and set the correct project
-Firebase login
-Firebase use –add
-Install dependencies and deploy functions
-Cd flutter_backend/functions
-Npm install
-Firebase deploy –only functions
-Post deployment checks
-Manually test key firebase functions(event creation,..)
-Review logs for any issues: firebase functions:log
-Production Readiness
-Remove all debug console.log() statements
-Ensure firestore rules are enforced(authentication checks,...)
-Limit write access to verified users to prevent abuse
-Complete this in the main branch of your repository by the stated deadline.
+
+## How to Build a Release
+### Frontend(Flutter)
+**1. Install dependencies**
+```bash
+flutter pub get
+flutter pub upgrade --major-versions 
+```
+
+**2. Build for web**
+```bash
+flutter build web
+```
+
+**3. Run static analysis**
+```bash
+flutter analyze
+```
+Confirm version increment in pubspec.yaml
+Manually test: login, signup, explore, profile, match, messaging (if complete)
+
+### Backend(Firebase Functions)
+Login & configure project
+```bash
+firebase login
+firebase use --add
+```
+
+Deploy cloud functions
+```bash
+cd firebase_backend/functions
+npm install
+firebase deploy --only functions
+```
+
+Post-deployment, check logs for issues
+```bash
+firebase functions:log     
+```
+
+###Production Readiness Check
+Confirm Firestore security rules are enforced
+Restrict write access to verified users only
+
+
