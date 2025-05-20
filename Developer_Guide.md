@@ -99,7 +99,7 @@ Post-deployment, check logs for issues
 firebase functions:log     
 ```
 
-###Production Readiness Check
+### Production Readiness Check
 Confirm Firestore security rules are enforced
 Restrict write access to verified users only
 
