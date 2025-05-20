@@ -78,7 +78,7 @@ flutter build web
 flutter analyze
 ```
 - Confirm version increment in pubspec.yaml
-- Manually test: login, signup, explore, profile, match, messaging (if complete)
+- Manually test: login, signup, explore, profile, match, messaging 
 
 ### Backend(Firebase Functions)
 Login & configure project
