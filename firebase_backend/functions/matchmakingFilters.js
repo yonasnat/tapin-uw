@@ -86,3 +86,88 @@ exports.clearUserFilters = functions.https.onCall(async (_data, context) => {
 
   return { status: 'cleared', clearedAt: new Date().toISOString() };
 });
+
+/**
+ * Obtain the potential matches based on the user's set filters and users they have ignored/requested
+ */
+exports.getPotentialMatches = functions.https.onCall(async (data, context) => {
+  if(!context.auth) {
+    throw new functions.https.HttpsError(
+      'unauthenticated',
+      'Must be signed in to get potential mathce.'
+    );
+  }
+
+  const uid = context.auth.uid;
+
+  // Obtain the user's set filters
+  let query = db.collection('users').where('uid', '!=', uid).limit(20);
+
+  if(filters.interests && filters.interests.length > 0) {
+    query = query.where('interest', 'array-contains-any', filters.interests);
+  }
+
+  return {
+    matches: potentialMatches,
+    hasMore: potentialMatches.length > 0
+  };
+})
+
+/**
+ * Add user to the list of ignored/rejected potential matches
+ */
+exports.ignoreUser = functions.https.onCall(async (data, context) => {
+  if(!context.auth) {
+    throw new functions.https.HttpsError(
+      'unauthenticated',
+      'Must be signed in to ignore users.'
+    );
+  }
+  
+  const uid = context.auth.uid;
+  const ignoredUid = data.ignoredUid;
+
+  if(!ignoredUid) {
+    throw new functions.https.HttpsError(
+      'invalid-argument',
+      'Ignored user ID is required.'
+    );
+  }
+
+  const userRef = db.collection('users').doc(uid);
+  await userRef.update({
+    ignoredUsers: admin.firestore.FieldValue.arrayUnion(ignoredUid)
+  });
+
+  return {
+    status: 'success'
+  };
+})
+
+/**
+ * Send an add request to the potential match
+ */
+exports.sendRequest = functions.https.onCall(async (data, context) => {
+  if(!context.auth) {
+    throw new functions.https.HttpsError(
+      'invalid-argument',
+      'Target user ID is required.'
+    );
+  }
+
+  // Add potential match to user's list of sent requests
+  const senderRef = db.collection('users').doc(uid);
+  await senderRef.update({
+    addedUsers: admin.firestore.FieldValue.arrayUnion(targetUID)
+  });
+
+  // Add user to potential match's list of received requests
+    const receiverRef = db.collection('users').doc(targetUID);
+  await receiverRef.update({
+    pendingUsers: admin.firestore.FieldValue.arrayUnion(uid)
+  });
+
+  return{
+    status:success
+  }
+});
