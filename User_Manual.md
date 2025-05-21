@@ -32,7 +32,6 @@ By offering a verified UW-only platform, TapIn@UW fosters a safer and more inten
 ```bash
 curl -sL https://firebase.tools | bash
 ```
-
 **5. Follow instructions to create an account and setup Firebase here:**
 ```bash
 [curl -sL https://firebase.tools | bash](https://firebase.google.com/docs/flutter/setup?platform=ios)
@@ -64,6 +63,7 @@ nano ~/.zshrc
 ```
 - Add the export path (e.g., export PATH="$PATH:$HOME/.pub-cache/bin") into the file
 - Save and exit nano
+<br /> 
 **5. Configure Firebase for Flutter**
 ```bash
 source ~/.zshrc
@@ -72,6 +72,7 @@ flutterfire configure
 ```
 - Select: tapin-uw (TapIn-UW)
 - Select: web (for which configuration to configure with)
+<br /> 
 **6. Start the App**
 ```bash
 flutter run
