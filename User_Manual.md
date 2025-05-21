@@ -2,7 +2,7 @@
 
 Welcome to TapIn@UW, a mobile app tailored for University of Washington students, alumni, and faculty to make meaningful social and academic connections.
 
-# High-Level Description
+## High-Level Description
 
 TapIn@UW enables users to:
 - Discover and post campus events
