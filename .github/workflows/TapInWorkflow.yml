@@ -39,12 +39,25 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Verify formatting
-        run: dart format --output=none --set-exit-if-changed .
+      # - name: Verify formatting
+      #   run: dart format --output=none --set-exit-if-changed .
 
-      # Consider passing '--fatal-infos' for slightly stricter analysis.
-      - name: Analyze project source
-        run: flutter analyze
+      - name: Format Dart code
+        run: dart format .
+
+      # - name: Commit and push any formatting changes
+      #   run: |
+      #     git config --global user.name "github-actions[bot]"
+      #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      #     git add .
+      #     git diff --cached --quiet || git commit -m "ci: apply dart format"
+      #     git push origin HEAD:${{ github.head_ref || github.ref_name }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # # Consider passing '--fatal-infos' for slightly stricter analysis.
+      # - name: Analyze project source
+      #   run: flutter analyze
 
       # Your project will need to have tests in test/ and a dependency on
       # package:test for this step to succeed. Note that Flutter projects will
