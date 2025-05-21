@@ -2,7 +2,7 @@
 
 Welcome to TapIn@UW, a mobile app tailored for University of Washington students, alumni, and faculty to make meaningful social and academic connections.
 
-## High-Level Description
+## About
 
 TapIn@UW enables users to:
 - Discover and post campus events
@@ -12,17 +12,32 @@ TapIn@UW enables users to:
 
 By offering a verified UW-only platform, TapIn@UW fosters a safer and more intentional environment for students to make friends, share meetups, and participate in UW community events.
 
-How to install the software. If your system has prerequisites (e.g., tools, libraries, emulators, third-party applications, etc.), your instructions should list all of them and indicate how to install and configure them. Make sure to indicate what specific version requirements these prerequisites must satisfy. If running the system requires the installation of, e.g., a virtual machine, a database, or an emulator, make sure to provide clear step-by-step instructions. - Thomas
-Download the project
-If Flutter is not downloaded on Mac:
-Determine the processor (Intel or Apple Silicon)
-Follow the respective instructions on the Flutter Docs: https://docs.flutter.dev/get-started/install/macos/web
-The Flutter Version/SDK: ^3.7.2
-Open the project in an IDE (VS Code is best)
-Open Terminal
-Navigate to the main directory of the project (tapin-uw)
-If Firebase is not downloaded on Mac:
-Run: curl -sL https://firebase.tools | bash
+## Installation
+### 1. Download the project
+- Open the repository: [Click Here](https://github.com/yonasnat/tapin-uw)
+- Click code
+- Click Download ZIP
+- Navigate to your computer's downloads folder
+- Unzip the package
+### 2. If Flutter is not downloaded on Mac:
+- Determine the processor (Intel or Apple Silicon)
+- Follow the respective instructions on the Flutter Docs: [Link Here](https://docs.flutter.dev/get-started/install/macos/web)
+- The Flutter Version/SDK: ^3.7.2
+### 3. Next Steps
+- Open the project in an IDE (VS Code is best)
+- Open Terminal
+- Navigate to the main directory of the project (tapin-uw)
+**4. If Firebase is not downloaded on Mac:**
+```bash
+git clone https://github.com/yonasnat/tapin-uw.git
+cd tapin-uw
+```
+
+
+
+
+
+curl -sL https://firebase.tools | bash
 Follow instructions to create an account and setup Firebase: https://firebase.google.com/docs/flutter/setup?platform=ios
 The Firebase Packages/Versions: 
 firebase_core: ^2.27.0
