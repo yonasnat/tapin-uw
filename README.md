@@ -37,7 +37,7 @@ App.tsx – The root React component that ties everything together. It includes 
 Weekly Reports: https://docs.google.com/document/d/1iC9KicQdTowXv4BmYF74I4orOGh5hEf4HAeVGV9t0pc/edit?usp=sharing
 
 User Documentation: [User Documentation](https://github.com/yonasnat/tapin-uw/blob/main/User_Manual.md)
-Developer Documentation: [Developer Documentation](https://github.com/yonasnat/tapin-uw/blob/main/Developer_Guide.md)
+Developer Documentation: [Developer Documentation](https://github.com/yonasnat/tapin-uw/blob/main/Developer_Guide.md) <br /> 
 *An invitation is required to access the Firebase (Users and Developers), Melanie (Our TA) has been invited.
 
 Operation Use Case(s):
