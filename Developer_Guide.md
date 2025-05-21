@@ -1,6 +1,5 @@
 ## How to Obtain the Source Code
-How to obtain the source code. If your system uses multiple repositories or submodules, provide clear instructions for how to obtain all relevant sources. - Yantong
-The source code can be obtained from the GitHub repository https://github.com/yonasnat/tapin-uw
+The source code can be all obtained from the GitHub repository: [Click Here](https://github.com/yonasnat/tapin-uw)
 The backend source code is in tapin-uw/firebase_backend/functions, and the frontend source code is in tapin-uw/flutter_frontend/lib.
 The layout of your directory structure. What do the various directories (folders) contain, and where to find source files, tests, documentation, data files, etc. - Adam
 How to build the software. Provide clear instructions for how to use your project’s build system to build all system components. - Amrit
