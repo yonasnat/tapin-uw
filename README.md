@@ -36,33 +36,9 @@ App.tsx – The root React component that ties everything together. It includes 
 
 Weekly Reports: https://docs.google.com/document/d/1iC9KicQdTowXv4BmYF74I4orOGh5hEf4HAeVGV9t0pc/edit?usp=sharing
 
-Set Up Instructions*:
-1. Download the project
-2. Open the project in an IDE (VS Code is best)
-3. Open Terminal
-4. If Firebase is not downloaded on Mac:
-
-   a. Run: curl -sL https://firebase.tools | bash
-
-   b. Follow instructions to create an account and setup Firebase 
-
-5. Run: cd flutter_frontend
-6. Run: flutter pub get
-7. Run: firebase login
-8. Run: dart pub global activate flutterfire_cli
-9. Note the export path (e.g., export PATH="$PATH:$HOME/.pub-cache/bin") at the end
-10. Run: nano ~/.zshrc
-11. Add the export path (e.g., export PATH="$PATH:$HOME/.pub-cache/bin") in the file
-12. Save and exit nano
-13. Run: source ~/.zshrc
-14. Run: flutterfire --version
-15. Run: flutterfire configure
-16. Select: tapin-uw (TapIn-UW)
-17. Select: web (for which configuration to configure with)
-18. Run: flutter run
-19. Select: [3] Chrome
-
-*An invitation is required to access the Firebase, Melanie (Our TA) has been invited.
+User Documentation: [User Documentation](https://github.com/yonasnat/tapin-uw/blob/main/User_Manual.md)
+Developer Documentation: [Developer Documentation](https://github.com/yonasnat/tapin-uw/blob/main/Developer_Guide.md)
+*An invitation is required to access the Firebase (Users and Developers), Melanie (Our TA) has been invited.
 
 Operation Use Case(s):
 1. User account creation with UW credentials
