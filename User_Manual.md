@@ -63,7 +63,6 @@ nano ~/.zshrc
 ```
 - Add the export path (e.g., export PATH="$PATH:$HOME/.pub-cache/bin") into the file
 - Save and exit nano
-<br /> 
 **5. Configure Firebase for Flutter**
 ```bash
 source ~/.zshrc
@@ -72,7 +71,6 @@ flutterfire configure
 ```
 - Select: tapin-uw (TapIn-UW)
 - Select: web (for which configuration to configure with)
-<br /> 
 **6. Start the App**
 ```bash
 flutter run
