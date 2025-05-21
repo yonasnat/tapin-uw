@@ -1,61 +1,100 @@
 ## How to Obtain the Source Code
 The source code can be all obtained from the GitHub repository: [Click Here](https://github.com/yonasnat/tapin-uw) <br /> 
 The backend source code is in tapin-uw/firebase_backend/functions, and the frontend source code is in tapin-uw/flutter_frontend/lib.
-The layout of your directory structure. What do the various directories (folders) contain, and where to find source files, tests, documentation, data files, etc. - Adam
-How to build the software. Provide clear instructions for how to use your project’s build system to build all system components. - Amrit
-1. Clone the Repository
+
+## Layout of Directory Structure
+From the root we have a assets/images folder which contains our logo, our  README.md  file that contains our documentation for the project, flutter_frontend and firebase_backend, a github/workflows folder which contains our TapinWorkFlow.yml and a gitignore file that contains the files we want git to ignore in commits/pushes <br /> 
+The flutter_frontend directory contains all of the platform configuration files(ios, android…), lib folder that contains the source code, our data files  and test folder that contains our tests. <br /> 
+The firebase_backend directory contains a functions folder that has our source code for all the firebase cloud functions(index.js, matchMakingFilters.js…), firestore.rules which are the security rules and other configuration files.
+
+## How to Build the Software
+**1. Clone the Repository**
+```bash
 git clone https://github.com/yonasnat/tapin-uw.git
 cd tapin-uw
-2. Build the Flutter Frontend
-Install Flutter SDK
+```
 
-
-
-     2. Fetch dependencies
-Run:  cd flutter_frontend
-Run: flutter pub get
-      3.Run/debug locally
-	Use: flutter run
-3. Build & Deploy the Backend (Cloud Functions)
-Install Node.js (v16+)
- Ensure node and npm are installed.
-Install Firebase CLI	
-Run: npm install -g firebase-tools
-     3. Authenticate & select project
-Run: firebase login
-         firebase use --add	
-                4. Fetch functions dependencies
-Run:  cd functions
-npm ci
-How to test the software. Provide clear instructions for how to run the system’s test cases. In some cases, the instructions may need to include information such as how to access data sources or how to interact with external systems. You may reference the user documentation (e.g., prerequisites) to avoid duplication. -Cory
-Frontend Testing: 
-Navigate to frontend directory
+### Frontend (Flutter)
+**1. Build the Flutter Frontend**
+```bash
+https://docs.flutter.dev/get-started/install/macos/web
+```
+**2. Fetch Dependencies**
+```bash
 cd flutter_frontend
-To run all tests
+flutter pub get
+```
+**3. Run/Debug Locally**
+```bash
+flutter run
+```
+
+### Build/Deploy the Backend (CLoud Functions)
+**1. Install Node.js (v16+)**
+```bash
+https://nodejs.org/en/download
+```
+**2. Install Firebase CLI**
+```bash
+npm install -g firebase-tools
+```
+**3. Authenticate & Select Project**
+```bash
+firebase login
+firebase use --add
+```
+**4. Fetch Function's Dependencies**
+```bash
+cd functions
+npm ci
+```
+
+## How to Test the Software
+### Frontend Testing
+**1. Navigate to Frontend Directory**
+```bash
+cd flutter_frontend
+```
+**To Run All Tests**
+```bash
 flutter test
-To run a specific unit test file
+```
+**To Run Specific Unit Test(s)**
+```bash
 Flutter test [FILENAME]
-Ex. flutter test test/widget_test.dart
-Backend Testing:
-Navigate to backend directory
+```
+Example: flutter test test/widget_test.dart
+
+### Backend Testing
+**1. Navigate to Backend Directory**
+```bash
 cd flutter_backend
 cd functions
-To run all tests
+```
+**To Run All Tests**
+```bash
 npm test
-How to add new tests. Are there any naming conventions/patterns to follow when naming test files? Is there a particular test harness to use? - Thomas
-Navigate to flutter_frontend folder -> test subfolder
-If file has not been created for the screen or function:
-Naming conventions: {screen name or function description}_test.dart
-Declare imports, such as the path of the file being tested
-Create a void main() method {}
-Add tests to target each element or function
-An example test file may look like this: 
+```
+
+## How to Add Tests
+### Navigation 
+- **flutter_frontend** folder
+- **test** subfolder
+### Creating Testing for New Screen or Function
+- Naming conventions: {screen name or function description}_test.dart
+- Declare imports, such as the path of the file being tested
+- Create a void main() method {}
+### Next Steps
+- Add tests to target each element or function
+- **Example Test File:**
+```bash
 import 'package:flutter_test/flutter_test.dart';
 void main() {
   test('sample test', () {
     expect(3 + 5, equals(8));
   });
 }
+```
 
 ## How to Build a Release
 ### Frontend(Flutter)
