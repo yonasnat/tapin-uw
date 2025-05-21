@@ -1,6 +1,4 @@
-3. Developer documentation (30%)
-Your public repository must contain developer guidelines. Anyone looking at your repository should be able to easily find these guidelines. The developer guidelines are focused solely on people who want to contribute to your project.
-The developer documentation should include at least the following information:
+## How to Obtain the Source Code
 How to obtain the source code. If your system uses multiple repositories or submodules, provide clear instructions for how to obtain all relevant sources. - Yantong
 The source code can be obtained from the GitHub repository https://github.com/yonasnat/tapin-uw
 The backend source code is in tapin-uw/firebase_backend/functions, and the frontend source code is in tapin-uw/flutter_frontend/lib.
