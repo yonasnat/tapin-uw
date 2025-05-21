@@ -62,7 +62,7 @@ dart pub global activate flutterfire_cli
 nano ~/.zshrc
 ```
 - Add the export path (e.g., export PATH="$PATH:$HOME/.pub-cache/bin") into the file
-- Save and exit nano
+- Save and exit nano <br /> 
 **5. Configure Firebase for Flutter**
 ```bash
 source ~/.zshrc
