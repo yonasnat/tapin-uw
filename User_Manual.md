@@ -26,7 +26,7 @@ By offering a verified UW-only platform, TapIn@UW fosters a safer and more inten
 ### 3. Next Steps
 - Open the project in an IDE (VS Code is best)
 - Open Terminal
-- Navigate to the main directory of the project (tapin-uw)
+- Navigate to the main directory of the project (tapin-uw) <br /> 
 **4. If Firebase is not downloaded on Mac:**
 ```bash
 git clone https://github.com/yonasnat/tapin-uw.git
