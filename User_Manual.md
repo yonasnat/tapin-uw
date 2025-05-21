@@ -27,25 +27,23 @@ By offering a verified UW-only platform, TapIn@UW fosters a safer and more inten
 - Open the project in an IDE (VS Code is best)
 - Open Terminal
 - Navigate to the main directory of the project (tapin-uw)
-### 4. If Firebase is not downloaded on Mac:
-**Run this command in the terminal**
+### 4. If Firebase is not downloaded on Mac
+**Run this command in the terminal:**
 ```bash
 curl -sL https://firebase.tools | bash
 ```
+**Follow instructions to create an account and setup Firebase here:**
+```bash
+[curl -sL https://firebase.tools | bash](https://firebase.google.com/docs/flutter/setup?platform=ios)
+```
+- The Firebase Packages/Versions:
+-   firebase_core: ^2.27.0
+-   firebase_auth: ^4.17.4
+-   cloud_firestore: ^4.15.5
+-   cloud_functions: ^4.6.5
 
+## Running the Software
 
-
-
-
-curl -sL https://firebase.tools | bash
-Follow instructions to create an account and setup Firebase: https://firebase.google.com/docs/flutter/setup?platform=ios
-The Firebase Packages/Versions: 
-firebase_core: ^2.27.0
-firebase_auth: ^4.17.4
-cloud_firestore: ^4.15.5
-cloud_functions: ^4.6.5
-How to run the software. How to start up the system? - Cory
-Once the software has all been installed:
 Navigate to the project directory
 cd tapin-uw
 cd flutter_frontend
