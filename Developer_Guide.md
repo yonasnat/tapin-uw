@@ -76,8 +76,8 @@ cd functions
 npm test
 ```
 
-
-
+## How to Add Tests
+### Navigate
 
 
 
