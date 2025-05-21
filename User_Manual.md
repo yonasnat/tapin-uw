@@ -32,7 +32,7 @@ By offering a verified UW-only platform, TapIn@UW fosters a safer and more inten
 ```bash
 curl -sL https://firebase.tools | bash
 ```
-**Follow instructions to create an account and setup Firebase here:**
+**5. Follow instructions to create an account and setup Firebase here:**
 ```bash
 [curl -sL https://firebase.tools | bash](https://firebase.google.com/docs/flutter/setup?platform=ios)
 ```
@@ -43,21 +43,42 @@ curl -sL https://firebase.tools | bash
 -   cloud_functions: ^4.6.5
 
 ## Running the Software
-
-Navigate to the project directory
+**1. Navigate to the project directory**
+```bash
 cd tapin-uw
 cd flutter_frontend
-Login to firebase
+```
+**2. Run Firebase**
+```bash
 firebase login
-Get the flutterfire CLI
+```
+**3. Get the Flutterfire CLI**
+```bash
 dart pub global activate flutterfire_cli
-Add flutterfire to PATH 
-echo 'export PATH="$PATH:$HOME/.pub-cache/bin"' >> ~/.zshrc
+```
+### Note the export path (e.g., export PATH="$PATH:$HOME/.pub-cache/bin") at the end
+**4. Add Flutterfire to PATH**
+```bash
+nano ~/.zshrc
+```
+- Add the export path (e.g., export PATH="$PATH:$HOME/.pub-cache/bin") into the file
+- Save and exit nano
+**5. Configure Firebase for Flutter**
+```bash
 source ~/.zshrc
-Configure firebase for flutter
+flutterfire --version
 flutterfire configure
-Start the app
+```
+- Select: tapin-uw (TapIn-UW)
+- Select: web (for which configuration to configure with)
+**6. Start the App**
+```bash
 flutter run
+```
+- Select: [3] Chrome
+
+
+
 How to use the software. You can assume that your user is familiar with your particular platform (e.g., use of a Web browser, desktop applications, or mobile applications). For missing functionality, your documentation should simply indicate that this functionality is work in progress. - Amrit
 Authentication:
 Sign Up:
