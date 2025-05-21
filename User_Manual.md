@@ -56,13 +56,14 @@ firebase login
 ```bash
 dart pub global activate flutterfire_cli
 ```
-### Note the export path (e.g., export PATH="$PATH:$HOME/.pub-cache/bin") at the end <br /> 
+#### Note the export path (e.g., export PATH="$PATH:$HOME/.pub-cache/bin") at the end <br /> 
 **4. Add Flutterfire to PATH**
 ```bash
 nano ~/.zshrc
 ```
 - Add the export path (e.g., export PATH="$PATH:$HOME/.pub-cache/bin") into the file
-- Save and exit nano <br /> 
+- Save and exit nano <br />
+
 **5. Configure Firebase for Flutter**
 ```bash
 source ~/.zshrc
@@ -105,7 +106,7 @@ flutter run
 
 ## Reporting Bugs
 All bugs should be reported through our GitHub Issues page: [Link Here](https://github.com/yonasnat/tapin-uw/issues) <br /> 
-### Bug reports should include the following information:
+#### Bug reports should include the following information:
 - Title – A short summary of the bug.
 - Steps to Reproduce – A clear, step-by-step list of how to trigger the bug.
 - Expected Behavior – What the user expected to happen.
