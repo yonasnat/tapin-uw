@@ -31,7 +31,7 @@ By offering a verified UW-only platform, TapIn@UW fosters a safer and more inten
 **Run this command in the terminal:**
 ```bash
 curl -sL https://firebase.tools | bash
-```
+``` 
 **5. Follow instructions to create an account and setup Firebase here:**
 ```bash
 [curl -sL https://firebase.tools | bash](https://firebase.google.com/docs/flutter/setup?platform=ios)
@@ -56,7 +56,7 @@ firebase login
 ```bash
 dart pub global activate flutterfire_cli
 ```
-### Note the export path (e.g., export PATH="$PATH:$HOME/.pub-cache/bin") at the end
+### Note the export path (e.g., export PATH="$PATH:$HOME/.pub-cache/bin") at the end <br /> 
 **4. Add Flutterfire to PATH**
 ```bash
 nano ~/.zshrc
