@@ -17,7 +17,7 @@ cd tapin-uw
 ### Frontend (Flutter)
 **1. Build the Flutter Frontend**
 ```bash
-Install Flutter SDK
+[Flutter SDK Instructions](https://docs.flutter.dev/get-started/install/macos/web)
 ```
 **2. Fetch Dependencies**
 ```bash
@@ -32,7 +32,7 @@ flutter run
 ### Build/Deploy the Backend (CLoud Functions)
 **1. Install Node.js (v16+)**
 ```bash
-
+[Node.js Instructions](https://nodejs.org/en/download)
 ```
 **2. Install Firebase CLI**
 ```bash
