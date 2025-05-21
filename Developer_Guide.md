@@ -1,4 +1,4 @@
-#TapIn@UW – Developer Manual
+# TapIn@UW – Developer Manual
 The source code can be all obtained from the GitHub repository: [Click Here](https://github.com/yonasnat/tapin-uw) <br /> 
 The backend source code is in tapin-uw/firebase_backend/functions, and the frontend source code is in tapin-uw/flutter_frontend/lib.
 
