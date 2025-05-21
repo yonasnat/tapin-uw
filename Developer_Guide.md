@@ -8,9 +8,16 @@ The flutter_frontend directory contains all of the platform configuration files(
 The firebase_backend directory contains a functions folder that has our source code for all the firebase cloud functions(index.js, matchMakingFilters.js…), firestore.rules which are the security rules and other configuration files.
 
 ## How to Build the Software
-1. Clone the Repository
+### Frontend(Flutter)
+**1. Clone the Repository**
+```bash
 git clone https://github.com/yonasnat/tapin-uw.git
 cd tapin-uw
+```
+**2. Build the Flutter Frontend**
+```bash
+Install Flutter SDK
+```
 2. Build the Flutter Frontend
 Install Flutter SDK
 
