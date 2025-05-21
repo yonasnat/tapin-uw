@@ -50,7 +50,7 @@ npm ci
 ```
 
 ## How to Test the Software
-###Frontend Testing: 
+### Frontend Testing
 **1. Navigate to Frontend Directory**
 ```bash
 cd flutter_frontend
@@ -65,7 +65,7 @@ Flutter test [FILENAME]
 ```
 Example: flutter test test/widget_test.dart
 
-###Backend Testing: 
+### Backend Testing
 **1. Navigate to Backend Directory**
 ```bash
 cd flutter_backend
