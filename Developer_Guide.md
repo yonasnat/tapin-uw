@@ -8,38 +8,48 @@ The flutter_frontend directory contains all of the platform configuration files(
 The firebase_backend directory contains a functions folder that has our source code for all the firebase cloud functions(index.js, matchMakingFilters.js…), firestore.rules which are the security rules and other configuration files.
 
 ## How to Build the Software
-### Frontend(Flutter)
 **1. Clone the Repository**
 ```bash
 git clone https://github.com/yonasnat/tapin-uw.git
 cd tapin-uw
 ```
-**2. Build the Flutter Frontend**
+
+### Frontend (Flutter)
+**1. Build the Flutter Frontend**
 ```bash
 Install Flutter SDK
 ```
-2. Build the Flutter Frontend
-Install Flutter SDK
+**2. Fetch Dependencies**
+```bash
+cd flutter_frontend
+flutter pub get
+```
+**3. Run/Debug Locally**
+```bash
+flutter run
+```
 
+### Build/Deploy the Backend (CLoud Functions)
+**1. Install Node.js (v16+)**
+```bash
 
-
-     2. Fetch dependencies
-Run:  cd flutter_frontend
-Run: flutter pub get
-      3.Run/debug locally
-	Use: flutter run
-3. Build & Deploy the Backend (Cloud Functions)
-Install Node.js (v16+)
- Ensure node and npm are installed.
-Install Firebase CLI	
-Run: npm install -g firebase-tools
-     3. Authenticate & select project
-Run: firebase login
-         firebase use --add	
-                4. Fetch functions dependencies
-Run:  cd functions
+```
+**2. Install Firebase CLI**
+```bash
+npm install -g firebase-tools
+```
+**3. Authenticate & Select Project**
+```bash
+firebase login
+firebase use --add
+```
+**4. Fetch Function's Dependencies**
+```bash
+cd functions
 npm ci
-How to test the software. Provide clear instructions for how to run the system’s test cases. In some cases, the instructions may need to include information such as how to access data sources or how to interact with external systems. You may reference the user documentation (e.g., prerequisites) to avoid duplication. -Cory
+```
+
+## How to Test the Software
 Frontend Testing: 
 Navigate to frontend directory
 cd flutter_frontend
