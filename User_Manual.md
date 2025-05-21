@@ -32,7 +32,8 @@ By offering a verified UW-only platform, TapIn@UW fosters a safer and more inten
 ```bash
 curl -sL https://firebase.tools | bash
 ```
-** 5. Follow instructions to create an account and setup Firebase here:**
+
+**5. Follow instructions to create an account and setup Firebase here:**
 ```bash
 [curl -sL https://firebase.tools | bash](https://firebase.google.com/docs/flutter/setup?platform=ios)
 ```
