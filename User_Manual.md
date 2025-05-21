@@ -77,42 +77,43 @@ flutter run
 ```
 - Select: [3] Chrome
 
+## Using the Software
+### 1. Authentication
+- Sign Up: Enter your UW email (@uw.edu), create a password, and choose a display name.
+- Log In: Enter your UW email and password.
+### 2. Profile Management
+- Create or Edit Profile:
+-   Tap Profile in the bottom navigation.
+-   Add a photo, bio, major, courses, and personal interests (tags).
+-   Tap Save to update your information.
+### 3. Creating & Sharing Events(Work in progress)
+- Tap the + Post icon in Explore.
+- Fill in event details:
+-   Title & Description
+-   Date & Time picker
+### 4. Filters & Matchmaking(Work in progress)
+- Filters:
+-   Navigate to Filters (in Explore).
+-   Toggle categories and set date ranges.
+- Friendship Matchmaking:
+-   Tap Match in the bottom navigation bar
+-   Swipe left (Ignore) or right (Add)
+### 5. Chat & Messaging(Work in progress)
+- Tap Messages in the bottom nav.
+- Select a conversation or start a new chat from a matched friend.
+- Send text messages; images and group chat coming soon.
 
+## Reporting Bugs
+All bugs should be reported through our GitHub Issues page: [Link Here](https://github.com/yonasnat/tapin-uw/issues) <br /> 
+### Bug reports should include the following information:
+- Title – A short summary of the bug.
+- Steps to Reproduce – A clear, step-by-step list of how to trigger the bug.
+- Expected Behavior – What the user expected to happen.
+- Actual Behavior – What actually happened.
+- Screenshots/Logs – Any relevant visuals or error messages.
+- Severity – Optional, but helps us prioritize (high, medium, low).
 
-How to use the software. You can assume that your user is familiar with your particular platform (e.g., use of a Web browser, desktop applications, or mobile applications). For missing functionality, your documentation should simply indicate that this functionality is work in progress. - Amrit
-Authentication:
-Sign Up:
-Enter your UW email (@uw.edu), create a password, and choose a display name.
-Log In:
-Enter your UW email and password.
-Profile Management
-Create or Edit Profile:
-Tap Profile in the bottom navigation.
-Add a photo, bio, major, courses, and personal interests (tags).
-Tap Save to update your information.
-Creating & Sharing Events
-Tap the + Post icon in Explore.
-Fill in event details:
-Title & Description
-Date & Time picker
-4.Filters & Matchmaking
-Filters:
-Navigate to Filters (in Explore).
-Toggle categories and set date ranges.
-Friendship Matchmaking:
-Tap Match in the bottom nav.
-Swipe left (Ignore) or right (Add)
-5. Chat & Messaging(Work in progress)
-Tap Messages in the bottom nav.
-Select a conversation or start a new chat from a matched friend.
-Send text messages; images and group chat coming soon.
-
-
-
-
-How to report a bug. This should include not just the mechanics (a pointer to your issue tracker), but also what information is needed. You can set up a bug-report template in your issue tracker, or you can reference a resource about how to write a good bug report. Here is an example for bug reporting guidelines. - Adam
-Known bugs. Known bugs or limitations should be documented in the bug tracker. A user testing the implemented use case(s) should not encounter trivial bugs (e.g., NPEs) or a large number of bugs that are unlisted in your bug tracker. - Yantong
-There is a deployment issue with getting macOS running. Chrome is the only working version of the app so far.
-The filter page, explore(events) page, matchmaking page, and profile page are currently static.
-
-Complete this in the main branch of your repository by the stated deadline.
+## Known Bugs
+- There is a deployment issue with getting macOS running. Chrome is the only working version of the app so far.
+- The explore(events) page and profile page are currently static.
+- The matchmaking page displays a Firebase error when there is no more users that are potential matches
