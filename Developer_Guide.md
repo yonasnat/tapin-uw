@@ -86,8 +86,7 @@ npm test
 - Create a void main() method {}
 ### Next Steps
 - Add tests to target each element or function
-- An example test file may look like this:
-- **Example**
+- **Example Test File:**
 ```bash
 import 'package:flutter_test/flutter_test.dart';
 void main() {
