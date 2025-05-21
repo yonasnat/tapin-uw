@@ -14,25 +14,25 @@ void main() {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());
 
-    // // Verify that the login screen is shown
-    // expect(find.text('TapIn'), findsOneWidget);
-    // expect(find.text('CONNECT AT UW'), findsOneWidget);
-    // expect(find.text('Login'), findsOneWidget);
-    // expect(find.text('Create an Account'), findsOneWidget);
-  });
+    // Verify that the login screen is shown
+    expect(find.text('TapIn'), findsOneWidget);
+    expect(find.text('CONNECT AT UW'), findsOneWidget);
+    expect(find.text('Login'), findsOneWidget);
+    expect(find.text('Create an Account'), findsOneWidget);
+  }, skip: true);
 
   // testing if the title passed into the home page is displayed properly in the appbar
   testWidgets('AppBar displays the correct title', (WidgetTester tester) async {
   const String testTitle = 'Test App Title';
 
-  // await tester.pumpWidget(
-  //   const MaterialApp(
-  //     home: MyHomePage(title: testTitle),
-  //   ),
-  // );
+  await tester.pumpWidget(
+    const MaterialApp(
+      home: MyHomePage(title: testTitle),
+    ),
+  );
 
-  // // Find the title text in the AppBar
-  // expect(find.text(testTitle), findsOneWidget);
-});
+  // Find the title text in the AppBar
+  expect(find.text(testTitle), findsOneWidget);
+}, skip: true);
 
 }

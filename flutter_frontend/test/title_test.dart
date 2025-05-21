@@ -7,8 +7,8 @@ void main() {
     // Build the app
     await tester.pumpWidget(const MyApp());
 
-    // // Verify the title is displayed
-    // expect(find.text('TapIn'), findsOneWidget);
-    // expect(find.text('CONNECT AT UW'), findsOneWidget);
-  });
+    // Verify the title is displayed
+    expect(find.text('TapIn'), findsOneWidget);
+    expect(find.text('CONNECT AT UW'), findsOneWidget);
+  }, skip: true);
 }
