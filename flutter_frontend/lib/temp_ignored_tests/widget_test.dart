@@ -19,7 +19,7 @@ void main() {
     expect(find.text('CONNECT AT UW'), findsOneWidget);
     expect(find.text('Login'), findsOneWidget);
     expect(find.text('Create an Account'), findsOneWidget);
-  }, skip: true);
+  });
 
   // testing if the title passed into the home page is displayed properly in the appbar
   testWidgets('AppBar displays the correct title', (WidgetTester tester) async {
@@ -33,6 +33,6 @@ void main() {
 
   // Find the title text in the AppBar
   expect(find.text(testTitle), findsOneWidget);
-}, skip: true);
+});
 
 }

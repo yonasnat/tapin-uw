@@ -10,5 +10,5 @@ void main() {
     // Verify the title is displayed
     expect(find.text('TapIn'), findsOneWidget);
     expect(find.text('CONNECT AT UW'), findsOneWidget);
-  }, skip: true);
+  });
 }

@@ -12,5 +12,5 @@ void main() {
     expect(find.text('@johndoe'), findsOneWidget);
     expect(find.text('Uploaded Photos'), findsOneWidget);
     expect(find.byIcon(Icons.person), findsOneWidget);
-  }, skip: true);
+  });
 }
