@@ -17,7 +17,7 @@ cd tapin-uw
 ### Frontend (Flutter)
 **1. Build the Flutter Frontend**
 ```bash
-[Flutter SDK Instructions](https://docs.flutter.dev/get-started/install/macos/web)
+https://docs.flutter.dev/get-started/install/macos/web
 ```
 **2. Fetch Dependencies**
 ```bash
@@ -32,7 +32,7 @@ flutter run
 ### Build/Deploy the Backend (CLoud Functions)
 **1. Install Node.js (v16+)**
 ```bash
-[Node.js Instructions](https://nodejs.org/en/download)
+https://nodejs.org/en/download
 ```
 **2. Install Firebase CLI**
 ```bash
@@ -50,21 +50,37 @@ npm ci
 ```
 
 ## How to Test the Software
-Frontend Testing: 
-Navigate to frontend directory
+###Frontend Testing: 
+**1. Navigate to Frontend Directory**
+```bash
 cd flutter_frontend
-To run all tests
+```
+**To Run All Tests**
+```bash
 flutter test
-To run a specific unit test file
+```
+**To Run Specific Unit Test(s)**
+```bash
 Flutter test [FILENAME]
-Ex. flutter test test/widget_test.dart
-Backend Testing:
-Navigate to backend directory
+```
+Example: flutter test test/widget_test.dart
+
+###Backend Testing: 
+**1. Navigate to Backend Directory**
+```bash
 cd flutter_backend
 cd functions
-To run all tests
+```
+**To Run All Tests**
+```bash
 npm test
-How to add new tests. Are there any naming conventions/patterns to follow when naming test files? Is there a particular test harness to use? - Thomas
+```
+
+
+
+
+
+
 Navigate to flutter_frontend folder -> test subfolder
 If file has not been created for the screen or function:
 Naming conventions: {screen name or function description}_test.dart
