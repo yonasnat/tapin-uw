@@ -77,23 +77,25 @@ npm test
 ```
 
 ## How to Add Tests
-### Navigate
-
-
-
-Navigate to flutter_frontend folder -> test subfolder
-If file has not been created for the screen or function:
-Naming conventions: {screen name or function description}_test.dart
-Declare imports, such as the path of the file being tested
-Create a void main() method {}
-Add tests to target each element or function
-An example test file may look like this: 
+### Navigation 
+- **flutter_frontend** folder
+- **test** subfolder
+### Creating Testing for New Screen or Function
+- Naming conventions: {screen name or function description}_test.dart
+- Declare imports, such as the path of the file being tested
+- Create a void main() method {}
+### Next Steps
+- Add tests to target each element or function
+- An example test file may look like this:
+- **Example**
+```bash
 import 'package:flutter_test/flutter_test.dart';
 void main() {
   test('sample test', () {
     expect(3 + 5, equals(8));
   });
 }
+```
 
 ## How to Build a Release
 ### Frontend(Flutter)
