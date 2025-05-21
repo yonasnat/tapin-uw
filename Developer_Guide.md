@@ -1,8 +1,13 @@
 ## How to Obtain the Source Code
 The source code can be all obtained from the GitHub repository: [Click Here](https://github.com/yonasnat/tapin-uw) <br /> 
 The backend source code is in tapin-uw/firebase_backend/functions, and the frontend source code is in tapin-uw/flutter_frontend/lib.
-The layout of your directory structure. What do the various directories (folders) contain, and where to find source files, tests, documentation, data files, etc. - Adam
-How to build the software. Provide clear instructions for how to use your project’s build system to build all system components. - Amrit
+
+## Layout of Directory Structure
+From the root we have a assets/images folder which contains our logo, our  README.md  file that contains our documentation for the project, flutter_frontend and firebase_backend, a github/workflows folder which contains our TapinWorkFlow.yml and a gitignore file that contains the files we want git to ignore in commits/pushes <br /> 
+The flutter_frontend directory contains all of the platform configuration files(ios, android…), lib folder that contains the source code, our data files  and test folder that contains our tests. <br /> 
+The firebase_backend directory contains a functions folder that has our source code for all the firebase cloud functions(index.js, matchMakingFilters.js…), firestore.rules which are the security rules and other configuration files.
+
+## How to Build the Software
 1. Clone the Repository
 git clone https://github.com/yonasnat/tapin-uw.git
 cd tapin-uw
