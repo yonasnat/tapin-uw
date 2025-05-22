@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tapin/login.dart';
 
+
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
@@ -57,7 +58,7 @@ class ProfileScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   // Name and Username
                   const Text(
-                    'John Doe', // Replace with dynamic name
+                    'Full Name', // Replace with dynamic name
                     style: TextStyle(
                       color: _white,
                       fontSize: 24,
@@ -66,7 +67,7 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    '@johndoe', // Replace with dynamic username
+                    '@username', // Replace with dynamic username
                     style: TextStyle(
                       color: _white,
                       fontSize: 16,

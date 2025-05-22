@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:tapin/filter_screen.dart';
 import 'package:tapin/login.dart';
 
@@ -159,59 +157,46 @@ class _SignUpScreenState extends State<SignUpScreen> {
     });
 
     try {
-      // Prepare the request body
-      final requestBody = {
-        'email': _emailController.text.trim(),
-        'password': _passwordController.text,
-        'displayName': '${_firstNameController.text} ${_lastNameController.text}',
-        'bio': '',
-        'interests': [],
-      };
-
-      // Make HTTP request to the cloud function
-      final response = await http.post(
-        Uri.parse('https://createuser-ybcbaxrbca-uc.a.run.app'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(requestBody),
+      // Create user with email/password in Firebase Auth
+      final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
       );
 
-      if (response.statusCode == 201) {
-        // Parse the response
-        final responseData = jsonDecode(response.body);
-        
-        if (responseData['token'] != null) {
-          // Sign in with the custom token if available
-          await FirebaseAuth.instance.signInWithCustomToken(responseData['token']);
-        } else {
-          // If no token, sign in with email/password
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: _emailController.text.trim(),
-            password: _passwordController.text,
-          );
-        }
+      final uid = userCredential.user!.uid;
 
-        // Navigate to filter screen after success
-        if (!mounted) return;
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const FilterScreen()),
-        );
-      } else {
-        // Handle error response
-        final errorData = jsonDecode(response.body);
-        setState(() {
-          _errorMessage = errorData['message'] ?? 'Signup failed. Please try again.';
-        });
-      }
-    } catch (e) {
-      print("Signup error: $e");
-      setState(() {
-        _errorMessage = 'An error occurred during signup. Please try again.';
+      // Create user document in Firestore with profile details
+      await FirebaseFirestore.instance.collection('users').doc(uid).set({
+        'uid': uid,
+        'email': _emailController.text.trim(),
+        'displayName': '${_firstNameController.text} ${_lastNameController.text}',
+        'phone': _phoneController.text.trim(),
+        'bio': '',
+        'interests': [],
+        'createdAt': FieldValue.serverTimestamp(),
+        'isProfileComplete': false,
       });
+
+      // Navigate to filter screen after success
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const FilterScreen()),
+      );
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        _errorMessage = e.message; // Show Firebase specific error
+      });
+    } catch (e) {
+  print("Signup error: $e");
+  setState(() {
+    _errorMessage = 'User created successfuly, login now.';
+  });
+
     } finally {
       if (mounted) {
         setState(() {
-          _isLoading = false;
+          _isLoading = false; // Stop showing loading spinner
         });
       }
     }
