@@ -264,7 +264,7 @@ exports.getUserPhotos = onRequest(async (request, response) => {
 
 /**
  * CREATE EVENT FUNCTION - Creates a new event in Firestore
- * 
+ * The event is created by the authenticated user who becomes the organizer.
  * Trigger: HTTP POST
  * Required Fields in body:
  * - title (string)
@@ -273,7 +273,7 @@ exports.getUserPhotos = onRequest(async (request, response) => {
  * - description (string)
  * - maxParticipants (number)
  * - tags (array of strings)
- * 
+ *
  * Optional:
  * - imageUrl (string)
  */
@@ -292,7 +292,7 @@ exports.createEvent = onRequest(async (request, response) => {
         description,
         maxParticipants,
         tags,
-        imageUrl
+        imageUrl,
       } = request.body;
 
       // Validate required fields
@@ -338,8 +338,8 @@ exports.createEvent = onRequest(async (request, response) => {
 });
 
 /**
- * GET EVENTS FUNCTION - Retrieves events with optional filtering
- * 
+ * GET EVENTS FUNCTION - Retrieves a list of events with optional filtering.
+ * Events are returned in ascending order by date.
  * Trigger: HTTP GET
  * Query Parameters:
  * - status (optional): "upcoming", "ongoing", "completed"
@@ -355,9 +355,9 @@ exports.getEvents = onRequest(async (request, response) => {
 
     try {
       const {status, limit = 10, startAfter} = request.query;
-      
+
       let query = admin.firestore().collection("events");
-      
+
       // Apply filters
       if (status) {
         query = query.where("status", "==", status);
@@ -371,13 +371,13 @@ exports.getEvents = onRequest(async (request, response) => {
             .get();
         query = query.startAfter(startAfterDoc);
       }
-      
+
       // Get events
       const snapshot = await query
           .orderBy("date", "asc")
           .limit(parseInt(limit))
           .get();
-      
+
       const events = [];
       snapshot.forEach((doc) => {
         events.push({
@@ -385,7 +385,7 @@ exports.getEvents = onRequest(async (request, response) => {
           ...doc.data(),
         });
       });
-      
+
       response.status(200).send({
         events,
         lastDocId: events.length > 0 ? events[events.length - 1].id : null,
@@ -401,8 +401,9 @@ exports.getEvents = onRequest(async (request, response) => {
 });
 
 /**
- * JOIN EVENT FUNCTION - Adds a user to an event's participants
- * 
+ * JOIN EVENT FUNCTION - Adds a user to an event's participants.
+ * The function checks if the event exists, isn't full,
+ * and the user hasn't already joined.
  * Trigger: HTTP POST
  * Required Fields in body:
  * - eventId (string)
@@ -469,7 +470,7 @@ exports.joinEvent = onRequest(async (request, response) => {
 
 /**
  * LEAVE EVENT FUNCTION - Removes a user from an event's participants
- * 
+ *
  * Trigger: HTTP POST
  * Required Fields in body:
  * - eventId (string)
