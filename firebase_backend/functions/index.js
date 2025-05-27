@@ -9,6 +9,17 @@ const cors = require("cors")({origin: true});
 // Initialize Firebase Admin SDK to access Auth and Firestore
 admin.initializeApp();
 
+// Import matchmaking filters functions
+const matchmakingFilters = require('./matchmakingFilters');
+
+// Export matchmaking filters functions
+exports.saveUserFilters = matchmakingFilters.saveUserFilters;
+exports.getUserFilters = matchmakingFilters.getUserFilters;
+exports.clearUserFilters = matchmakingFilters.clearUserFilters;
+exports.getPotentialMatches = matchmakingFilters.getPotentialMatches;
+exports.ignoreUser = matchmakingFilters.ignoreUser;
+exports.sendRequest = matchmakingFilters.sendRequest;
+
 /**
  * SIGNUP FUNCTION - Creates a new user in Firebase Authentication
  * and Firestore.

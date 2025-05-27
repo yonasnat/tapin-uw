@@ -22,6 +22,12 @@ service cloud.firestore {
       allow create: if isAuthenticated() && request.auth.uid == userId;
       allow update: if isOwner(userId);
       allow delete: if isOwner(userId);
+
+      // Filters subcollection rules
+      match /filters/{document=**} {
+        allow read: if isOwner(userId);
+        allow write: if isOwner(userId);
+      }
     }
 
     // Events collection rules
