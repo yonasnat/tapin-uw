@@ -14,6 +14,46 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
   int _currentMatchIndex = 0;
   bool _isLoading = true;
   bool _hasMoreMatches = true;
+  bool _showSentRequests = false;
+
+  // Premade profiles when there are no other users active
+  final List<Map<String, dynamic>> _premadeProfiles = [
+    {
+      'firstName': 'Jason',
+      'lastName': 'Smith',
+      'bio': 'Hi I am Jason! I study computer science at UW and outside of school, I love hiking and photography. Looking to build connections and find outdoor adventure partners!',
+      'interests': ['Programming', 'Hiking', 'Photography'],
+      'photoURL': null,
+    },
+    {
+      'firstName': 'Amy',
+      'lastName': 'Lee',
+      'bio': 'Hey my name is Amy! I am a business student passionate about entrepreneurship and basketball. Always down for a game or startup discussion!',
+      'interests': ['Basketball', 'Business Major'],
+      'photoURL': null,
+    },
+    {
+      'firstName': 'Daniel',
+      'lastName': 'Rodriguez',
+      'bio': 'Hi everyone I am Daniel. I am an art major who enjoys painting and rock climbing. Looking for creative friends to explore Seattle with!',
+      'interests': ['Art', 'Rock Climbing', 'Travel'],
+      'photoURL': null,
+    },
+    {
+      'firstName': 'David',
+      'lastName': 'Kim',
+      'bio': 'Engineering student who loves gaming and coding. Looking to meet people with similar interests!',
+      'interests': ['Engineering', 'Coding', 'Robotics', 'Esports'],
+      'photoURL': null,
+    },
+    {
+      'firstName': 'Sophia',
+      'lastName': 'Johnson',
+      'bio': 'Hi I am a computer science major at UW. I like coding and playing video games, always trying to meet new people!',
+      'interests': ['Computer Science', 'Gamer', 'Reading'],
+      'photoURL': null,
+    },
+  ];
   
   @override
   void initState() {
@@ -27,8 +67,12 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
       final result = await _functions.httpsCallable('getPotentialMatches').call();
       final data = result.data as Map<String, dynamic>;
       
+      // Obtain data from Firebase regarding matches (if no data exists, use preloaded data)
       setState(() {
         _potentialMatches = List<Map<String, dynamic>>.from(data['matches'] ?? []);
+        if (_potentialMatches.isEmpty) {
+          _potentialMatches = List.from(_premadeProfiles);
+        }
         _hasMoreMatches = data['hasMore'] as bool? ?? false;
         _currentMatchIndex = 0; // Reset index when loading new matches
         _isLoading = false;
@@ -36,7 +80,7 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
     } catch (e) {
       setState(() {
         _isLoading = false;
-        _potentialMatches = []; // Clear matches on error
+        _potentialMatches = List.from(_premadeProfiles);
         _currentMatchIndex = 0;
       });
       ScaffoldMessenger.of(context).showSnackBar(
@@ -52,9 +96,15 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
     final currentMatch = _potentialMatches[_currentMatchIndex];
     
     try {
-      await _functions.httpsCallable('ignoreUser').call({
+      // Since there are preloaded profiles, only make Firebase calls on real profiles
+      // Make a call indicating that current user has chose to ignore another user
+      if (currentMatch['uid'] != null) {
+        await _functions.httpsCallable('ignoreUser').call({
         'ignoredUid': currentMatch['uid'],
-      });
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Potential Match Ignored')));
+      }
 
       setState(() {
         _currentMatchIndex++;
@@ -75,9 +125,15 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
     }
     final currentMatch = _potentialMatches[_currentMatchIndex];
     try {
-      await _functions.httpsCallable('sendFriendRequest').call({
-        'targetUid': currentMatch['uid'],
-      });
+      // Since there are preloaded profiles, only make Firebase calls on real profiles
+      // Make a call indicating that current user has sent a friend request to another user
+      if (currentMatch['uid'] != null) {
+        await _functions.httpsCallable('sendFriendRequest').call({
+          'targetUid': currentMatch['uid'],
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Sent Request Successfully')));
+      }
       setState(() {
         _currentMatchIndex++;
         if (_currentMatchIndex >= _potentialMatches.length && _hasMoreMatches) {
