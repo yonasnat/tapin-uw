@@ -68,7 +68,7 @@ class EventsPage extends StatelessWidget {
 }
 
 // ─────────────────────────────────────────────────────────────────────
-class _EventCard extends StatelessWidget {
+class _EventCard extends StatefulWidget {
   const _EventCard({
     required this.title,
     required this.date,
@@ -81,8 +81,16 @@ class _EventCard extends StatelessWidget {
   final String location;
   final List<String> tags;
 
+  @override
+  State<_EventCard> createState() => _EventCardState();
+}
+
+class _EventCardState extends State<_EventCard> {
+  bool isJoined = false;
+
   static const _beige = EventsPage._beige;
-  static const _navy  = EventsPage._navy;
+  static const _navy = EventsPage._navy;
+  static const _uwPurple = EventsPage._uwPurple;
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +107,7 @@ class _EventCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title,
+              Text(widget.title,
                   style: Theme.of(context)
                       .textTheme
                       .titleMedium
@@ -109,7 +117,7 @@ class _EventCard extends StatelessWidget {
                 children: [
                   const Icon(Icons.calendar_today_rounded, size: 16, color: _navy),
                   const SizedBox(width: 6),
-                  Text(date, style: TextStyle(color: _navy)),
+                  Text(widget.date, style: TextStyle(color: _navy)),
                 ],
               ),
               const SizedBox(height: 2),
@@ -117,17 +125,17 @@ class _EventCard extends StatelessWidget {
                 children: [
                   const Icon(Icons.place_rounded, size: 16, color: _navy),
                   const SizedBox(width: 6),
-                  Text(location, style: TextStyle(color: _navy)),
+                  Text(widget.location, style: TextStyle(color: _navy)),
                 ],
               ),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 6,
                 runSpacing: -8,
-                children: tags
+                children: widget.tags
                     .map((t) => Chip(
                           label: Text(t),
-                          backgroundColor: Colors.white.withValues(alpha: 128),
+                          backgroundColor: Colors.white.withOpacity(0.5),
                           labelStyle: const TextStyle(fontSize: 12, color: _navy),
                           side: const BorderSide(color: _navy, width: .5),
                           padding: const EdgeInsets.symmetric(horizontal: 6),
@@ -139,16 +147,23 @@ class _EventCard extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   style: TextButton.styleFrom(
-                    foregroundColor: _navy,
-                    backgroundColor: Colors.white,
+                    foregroundColor: isJoined ? Colors.white : _navy,
+                    backgroundColor: isJoined ? _uwPurple : Colors.white,
                     minimumSize: const Size(80, 32),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
-                      side: const BorderSide(color: _navy, width: .8),
+                      side: BorderSide(
+                        color: isJoined ? _uwPurple : _navy,
+                        width: .8,
+                      ),
                     ),
                   ),
-                  onPressed: () {}, // TODO: implement join logic
-                  child: const Text('Join'),
+                  onPressed: () {
+                    setState(() {
+                      isJoined = !isJoined;
+                    });
+                  },
+                  child: Text(isJoined ? 'Unjoin' : 'Join'),
                 ),
               ),
             ],
