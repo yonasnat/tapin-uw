@@ -29,8 +29,8 @@ exports.saveUserFilters = functions.https.onCall(async (data, context) => {
     );
   }
 
-  // 3) Persist to Firestore
-  const userRef = db.collection('users').doc(uid);
+  // 3) Persist to Firestore in the correct location
+  const userRef = db.collection('users').doc(uid).collection('filters').doc('preferences');
   await userRef.set(
     {
       filters: filters,
@@ -53,13 +53,13 @@ exports.getUserFilters = functions.https.onCall(async (_data, context) => {
     );
   }
   const uid = context.auth.uid;
-  const userSnap = await db.collection('users').doc(uid).get();
+  const filtersSnap = await db.collection('users').doc(uid).collection('filters').doc('preferences').get();
 
-  if (!userSnap.exists) {
+  if (!filtersSnap.exists) {
     return { filters: null, filtersUpdatedAt: null };
   }
 
-  const data = userSnap.data();
+  const data = filtersSnap.data();
   return {
     filters: data.filters || null,
     filtersUpdatedAt: data.filtersUpdatedAt || null,
@@ -77,7 +77,7 @@ exports.clearUserFilters = functions.https.onCall(async (_data, context) => {
     );
   }
   const uid = context.auth.uid;
-  const userRef = db.collection('users').doc(uid);
+  const userRef = db.collection('users').doc(uid).collection('filters').doc('preferences');
 
   await userRef.update({
     filters: admin.firestore.FieldValue.delete(),
@@ -94,24 +94,37 @@ exports.getPotentialMatches = functions.https.onCall(async (data, context) => {
   if(!context.auth) {
     throw new functions.https.HttpsError(
       'unauthenticated',
-      'Must be signed in to get potential mathce.'
+      'Must be signed in to get potential matches.'
     );
   }
 
   const uid = context.auth.uid;
+  
+  // Get user's filters first
+  const filtersDoc = await db.collection('users').doc(uid).collection('filters').doc('preferences').get();
+  const filters = filtersDoc.exists ? filtersDoc.data().filters : null;
 
-  // Obtain the user's set filters
+  // Build query based on filters
   let query = db.collection('users').where('uid', '!=', uid).limit(20);
 
-  if(filters.interests && filters.interests.length > 0) {
-    query = query.where('interest', 'array-contains-any', filters.interests);
+  if (filters && filters.interests && filters.interests.length > 0) {
+    query = query.where('interests', 'array-contains-any', filters.interests);
   }
+
+  const snapshot = await query.get();
+  const potentialMatches = [];
+  snapshot.forEach(doc => {
+    potentialMatches.push({
+      uid: doc.id,
+      ...doc.data()
+    });
+  });
 
   return {
     matches: potentialMatches,
     hasMore: potentialMatches.length > 0
   };
-})
+});
 
 /**
  * Add user to the list of ignored/rejected potential matches
@@ -150,6 +163,16 @@ exports.ignoreUser = functions.https.onCall(async (data, context) => {
 exports.sendRequest = functions.https.onCall(async (data, context) => {
   if(!context.auth) {
     throw new functions.https.HttpsError(
+      'unauthenticated',
+      'Must be signed in to send requests.'
+    );
+  }
+
+  const uid = context.auth.uid;
+  const targetUID = data.targetUID;
+
+  if(!targetUID) {
+    throw new functions.https.HttpsError(
       'invalid-argument',
       'Target user ID is required.'
     );
@@ -162,12 +185,12 @@ exports.sendRequest = functions.https.onCall(async (data, context) => {
   });
 
   // Add user to potential match's list of received requests
-    const receiverRef = db.collection('users').doc(targetUID);
+  const receiverRef = db.collection('users').doc(targetUID);
   await receiverRef.update({
     pendingUsers: admin.firestore.FieldValue.arrayUnion(uid)
   });
 
-  return{
-    status:success
-  }
+  return {
+    status: 'success'
+  };
 });
