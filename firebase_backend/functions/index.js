@@ -517,3 +517,6 @@ exports.leaveEvent = onRequest(async (request, response) => {
     }
   });
 });
+
+// Export the saveUserFilters function
+exports.saveUserFilters = require('./saveUserFilters').saveUserFilters;
