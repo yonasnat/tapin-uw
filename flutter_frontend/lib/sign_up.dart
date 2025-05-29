@@ -146,7 +146,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return _isEmailValid && _isPasswordValid && _isPasswordMatch;
   }
 
-  // Handles signup logic with Firebase Auth and Firestore 
+  // Handles signup logic with Firebase Cloud Functions
   Future<void> _signUp() async {
     setState(() {
       _errorMessage = null;
