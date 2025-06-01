@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:tapin/models/event.dart';
+import '../models/event.dart';
+import '../services/event_service.dart';
+import '../theme/colors.dart';
 
 class CreateEventScreen extends StatefulWidget {
   const CreateEventScreen({super.key});
@@ -11,10 +12,6 @@ class CreateEventScreen extends StatefulWidget {
 }
 
 class _CreateEventScreenState extends State<CreateEventScreen> {
-  static const _uwPurple = Color(0xFF7D3CFF);
-  static const _beige = Color(0xFFE9C983);
-  static const _navy = Color(0xFF231942);
-
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _locationController = TextEditingController();
@@ -26,6 +23,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   TimeOfDay _selectedTime = TimeOfDay.now();
   List<String> _tags = [];
   bool _isLoading = false;
+
+  final EventService _eventService = EventService();
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -105,7 +104,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
         createdAt: DateTime.now(),
       );
 
-      await FirebaseFirestore.instance.collection('events').add(event.toMap());
+      await _eventService.createEvent(event);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -141,7 +140,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Event'),
-        backgroundColor: _uwPurple,
+        backgroundColor: AppColors.uwPurple,
         foregroundColor: Colors.white,
       ),
       body: _isLoading
@@ -254,7 +253,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                           onPressed: _addTag,
                           icon: const Icon(Icons.add),
                           style: IconButton.styleFrom(
-                            backgroundColor: _uwPurple,
+                            backgroundColor: AppColors.uwPurple,
                             foregroundColor: Colors.white,
                           ),
                         ),
@@ -274,7 +273,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     ElevatedButton(
                       onPressed: _createEvent,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: _uwPurple,
+                        backgroundColor: AppColors.uwPurple,
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
