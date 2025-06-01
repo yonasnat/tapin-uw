@@ -9,10 +9,10 @@ class Event {
   final int maxParticipants;
   final int currentParticipants;
   final List<String> tags;
-  final String? imageUrl;
   final String organizerId;
   final String status;
   final DateTime createdAt;
+  final String? imageUrl;
 
   Event({
     required this.id,
@@ -23,73 +23,57 @@ class Event {
     required this.maxParticipants,
     required this.currentParticipants,
     required this.tags,
-    this.imageUrl,
     required this.organizerId,
     required this.status,
     required this.createdAt,
+    this.imageUrl,
   });
 
-  factory Event.fromFirestore(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
+  factory Event.fromMap(Map<String, dynamic> map, String docId) {
+    DateTime parseDate(dynamic dateValue) {
+      if (dateValue is Timestamp) {
+        return dateValue.toDate();
+      } else if (dateValue is Map<String, dynamic>) {
+        // Handle JSON date format from Cloud Functions
+        return DateTime.parse(dateValue['_seconds'] != null 
+          ? DateTime.fromMillisecondsSinceEpoch(dateValue['_seconds'] * 1000).toIso8601String()
+          : dateValue.toString());
+      } else if (dateValue is String) {
+        return DateTime.parse(dateValue);
+      } else {
+        throw Exception('Invalid date format: $dateValue');
+      }
+    }
+
     return Event(
-      id: doc.id,
-      title: data['title'] ?? '',
-      date: (data['date'] as Timestamp).toDate(),
-      location: data['location'] ?? '',
-      description: data['description'] ?? '',
-      maxParticipants: data['maxParticipants'] ?? 0,
-      currentParticipants: data['currentParticipants'] ?? 0,
-      tags: List<String>.from(data['tags'] ?? []),
-      imageUrl: data['imageUrl'],
-      organizerId: data['organizerId'] ?? '',
-      status: data['status'] ?? 'upcoming',
-      createdAt: (data['createdAt'] as Timestamp).toDate(),
+      id: docId,
+      title: map['title'] ?? '',
+      date: parseDate(map['date']),
+      location: map['location'] ?? '',
+      description: map['description'] ?? '',
+      maxParticipants: map['maxParticipants'] ?? 0,
+      currentParticipants: map['currentParticipants'] ?? 0,
+      tags: List<String>.from(map['tags'] ?? []),
+      organizerId: map['organizerId'] ?? '',
+      status: map['status'] ?? 'upcoming',
+      createdAt: parseDate(map['createdAt']),
+      imageUrl: map['imageUrl'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'title': title,
-      'date': Timestamp.fromDate(date),
+      'date': date.toIso8601String(),
       'location': location,
       'description': description,
       'maxParticipants': maxParticipants,
       'currentParticipants': currentParticipants,
       'tags': tags,
-      'imageUrl': imageUrl,
       'organizerId': organizerId,
       'status': status,
-      'createdAt': Timestamp.fromDate(createdAt),
+      'createdAt': createdAt.toIso8601String(),
+      if (imageUrl != null) 'imageUrl': imageUrl,
     };
   }
-
-  Event copyWith({
-    String? id,
-    String? title,
-    DateTime? date,
-    String? location,
-    String? description,
-    int? maxParticipants,
-    int? currentParticipants,
-    List<String>? tags,
-    String? imageUrl,
-    String? organizerId,
-    String? status,
-    DateTime? createdAt,
-  }) {
-    return Event(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      date: date ?? this.date,
-      location: location ?? this.location,
-      description: description ?? this.description,
-      maxParticipants: maxParticipants ?? this.maxParticipants,
-      currentParticipants: currentParticipants ?? this.currentParticipants,
-      tags: tags ?? this.tags,
-      imageUrl: imageUrl ?? this.imageUrl,
-      organizerId: organizerId ?? this.organizerId,
-      status: status ?? this.status,
-      createdAt: createdAt ?? this.createdAt,
-    );
-  }
-}
+} 
