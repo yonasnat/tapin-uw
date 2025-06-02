@@ -291,7 +291,13 @@ exports.getEvents = onRequest(async (request, response) => {
         query = query.where("status", "==", status);
       }
       
-      // Apply pagination
+      // Only show future events
+      query = query.where("date", ">=", admin.firestore.Timestamp.now());
+      
+      // Order by date first
+      query = query.orderBy("date", "asc");
+      
+      // Apply pagination after ordering
       if (startAfter) {
         const startAfterDoc = await admin.firestore()
             .collection("events")
@@ -302,7 +308,6 @@ exports.getEvents = onRequest(async (request, response) => {
 
       // Get events
       const snapshot = await query
-          .orderBy("date", "asc")
           .limit(parseInt(limit))
           .get();
 
