@@ -7,6 +7,13 @@ From the root we have a assets/images folder which contains our logo, our  READM
 The flutter_frontend directory contains all of the platform configuration files(ios, android…), lib folder that contains the source code, our data files  and test folder that contains our tests. <br /> 
 The firebase_backend directory contains a functions folder that has our source code for all the firebase cloud functions(index.js, matchMakingFilters.js…), firestore.rules which are the security rules and other configuration files.
 
+## Prerequisites
+Before building or running Tapin@UW, make sure the following are installed on your machine:
+- Flutter SDK
+- Firebase CLI
+- Node.js (v16+)
+- C++ Desktop Development Kit from VS Code(may be needed for windows users)
+
 ## How to Build the Software
 **1. Clone the Repository**
 ```bash
