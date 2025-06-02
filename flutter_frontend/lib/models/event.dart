@@ -34,10 +34,12 @@ class Event {
       if (dateValue is Timestamp) {
         return dateValue.toDate();
       } else if (dateValue is Map<String, dynamic>) {
+        // Handle Firestore Timestamp format
+        if (dateValue['_seconds'] != null) {
+          return DateTime.fromMillisecondsSinceEpoch(dateValue['_seconds'] * 1000);
+        }
         // Handle JSON date format from Cloud Functions
-        return DateTime.parse(dateValue['_seconds'] != null 
-          ? DateTime.fromMillisecondsSinceEpoch(dateValue['_seconds'] * 1000).toIso8601String()
-          : dateValue.toString());
+        return DateTime.parse(dateValue.toString());
       } else if (dateValue is String) {
         return DateTime.parse(dateValue);
       } else {

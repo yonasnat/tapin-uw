@@ -179,89 +179,6 @@ exports.loginUser = onRequest(async (request, response) => {
   });
 });
 
-
- // GET USER PROFILE - Returns user profile from Firestore
-exports.getUserProfile = onRequest(async (request, response) => {
-  return cors(request, response, async () => {
-    if (request.method !== "GET") {
-      response.status(405).send({ error: "Only GET requests allowed" });
-      return;
-    }
-
-    const uid = request.query.uid;
-    if (!uid) {
-      response.status(400).send({ message: "Missing uid in query parameters" });
-      return;
-    }
-
-    try {
-      const userDoc = await admin.firestore().collection("users").doc(uid).get();
-
-      if (!userDoc.exists) {
-        response.status(404).send({ message: "User profile not found" });
-        return;
-      }
-
-      const data = userDoc.data();
-      response.status(200).send({
-        uid,
-        displayName: data.displayName || "",
-        username: data.username || "",
-        bio: data.bio || "",
-        interests: data.interests || [],
-        createdAt: data.createdAt || null,
-        photoUrls: data.photoUrls || [],
-      });
-    } catch (error) {
-      logger.error("Error fetching user profile:", error);
-      response.status(500).send({
-        message: "Failed to retrieve profile",
-        error: error.message,
-      });
-    }
-  });
-});
-
-
- //GET USER PHOTOS - Returns signed image URLs from Firebase Storage
-
-exports.getUserPhotos = onRequest(async (request, response) => {
-  return cors(request, response, async () => {
-    if (request.method !== "GET") {
-      response.status(405).send({ error: "Only GET requests allowed" });
-      return;
-    }
-
-    const uid = request.query.uid;
-    if (!uid) {
-      response.status(400).send({ message: "Missing uid in query parameters" });
-      return;
-    }
-
-    try {
-      const bucket = admin.storage().bucket();
-      const [files] = await bucket.getFiles({ prefix: `users/${uid}/photos/` });
-
-      const urls = await Promise.all(
-        files.map(file =>
-          file.getSignedUrl({
-            action: "read",
-            expires: "03-01-2500",
-          }).then(urls => urls[0])
-        )
-      );
-
-      response.status(200).send({ photoUrls: urls });
-    } catch (error) {
-      logger.error("Error fetching photo URLs:", error);
-      response.status(500).send({
-        message: "Failed to retrieve photos",
-        error: error.message,
-      });
-    }
-  });
-});
-
 /**
  * CREATE EVENT FUNCTION - Creates a new event in Firestore
  * The event is created by the authenticated user who becomes the organizer.
@@ -285,6 +202,17 @@ exports.createEvent = onRequest(async (request, response) => {
     }
 
     try {
+      // Get the ID token from the Authorization header
+      const authHeader = request.headers.authorization;
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        response.status(401).send({message: "No authorization token provided"});
+        return;
+      }
+
+      const idToken = authHeader.split('Bearer ')[1];
+      const decodedToken = await admin.auth().verifyIdToken(idToken);
+      const userId = decodedToken.uid;
+
       const {
         title,
         date,
@@ -292,7 +220,7 @@ exports.createEvent = onRequest(async (request, response) => {
         description,
         maxParticipants,
         tags,
-        imageUrl,
+        imageUrl
       } = request.body;
 
       // Validate required fields
@@ -306,13 +234,13 @@ exports.createEvent = onRequest(async (request, response) => {
       // Create event document
       const eventData = {
         title,
-        date: new Date(date),
+        date: admin.firestore.Timestamp.fromDate(new Date(date)),
         location,
         description,
         maxParticipants,
         tags: tags || [],
         imageUrl: imageUrl || null,
-        organizerId: request.auth.uid,
+        organizerId: userId,
         currentParticipants: 0,
         status: "upcoming",
         createdAt: admin.firestore.FieldValue.serverTimestamp(),

@@ -102,10 +102,10 @@ class _EventsPageState extends State<EventsPage> {
             : _error != null && _events.isEmpty
                 ? Center(child: Text(_error!, style: const TextStyle(color: Colors.red)))
                 : ListView.separated(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
                     itemCount: _events.length + (_hasMore ? 1 : 0),
-                    separatorBuilder: (_, __) => const SizedBox(height: 16),
-                    itemBuilder: (context, index) {
+        separatorBuilder: (_, __) => const SizedBox(height: 16),
+        itemBuilder: (context, index) {
                       if (index == _events.length) {
                         _loadEvents();
                         return const Center(
@@ -117,12 +117,12 @@ class _EventsPageState extends State<EventsPage> {
                       }
 
                       final event = _events[index];
-                      return _EventCard(
+          return _EventCard(
                         event: event,
                         onJoin: () => _joinEvent(event.id),
-                      );
-                    },
-                  ),
+          );
+        },
+      ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -164,9 +164,9 @@ class _EventCard extends StatelessWidget {
             children: [
               Text(
                 event.title,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
                     ?.copyWith(color: AppColors.navy, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 4),
@@ -211,12 +211,12 @@ class _EventCard extends StatelessWidget {
                     style: const TextStyle(color: AppColors.navy),
                   ),
                   TextButton(
-                    style: TextButton.styleFrom(
+                  style: TextButton.styleFrom(
                       foregroundColor: AppColors.navy,
-                      backgroundColor: Colors.white,
-                      minimumSize: const Size(80, 32),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                    backgroundColor: Colors.white,
+                    minimumSize: const Size(80, 32),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
                         side: const BorderSide(color: AppColors.navy, width: .8),
                       ),
                     ),

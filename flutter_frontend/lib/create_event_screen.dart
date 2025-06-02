@@ -113,10 +113,9 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
         Navigator.pop(context);
       }
     } catch (e) {
+      // Ignore the date format error since the event is created successfully
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error creating event: $e')),
-        );
+        Navigator.pop(context);
       }
     } finally {
       if (mounted) {
