@@ -90,7 +90,7 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
         _potentialMatches = [];
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error loading matches: $e')),
+        SnackBar(content: Text('Error loading matches: $e'), duration: Duration(milliseconds: 500)),
       );
     }
   }
@@ -106,7 +106,7 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('You must be logged in to ignore matches')),
+        const SnackBar(content: Text('You must be logged in to ignore matches'), duration: Duration(milliseconds: 500)),
       );
       return;
     }
@@ -130,12 +130,12 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Match ignored')),
+        const SnackBar(content: Text('Match ignored'), duration: Duration(milliseconds: 500)),
       );
     } catch (e) {
       print('Error ignoring match: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to ignore match: $e')),
+        SnackBar(content: Text('Failed to ignore match: $e'), duration: Duration(milliseconds: 500)),
       );
     }
   }
@@ -151,7 +151,7 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('You must be logged in to save matches')),
+        const SnackBar(content: Text('You must be logged in to save matches'), duration: Duration(milliseconds: 500)),
       );
       return;
     }
@@ -175,12 +175,12 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Match saved')),
+        const SnackBar(content: Text('Match saved'), duration: Duration(milliseconds: 500)),
       );
     } catch (e) {
       print('Error saving match: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to save match: $e')),
+        SnackBar(content: Text('Failed to save match: $e'), duration: Duration(milliseconds: 500)),
       );
     }
   }
