@@ -54,7 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           name = data['name'] ?? data['displayName'] ?? 'Unnamed';
           bio = data['bio'] ?? '';
           profilePicUrl = data['profilePicUrl'];
-          interests = List<String>.from(data['interests'] ?? []);
+          interests = List<String>.from(data['filters'] ?? []);
           postUrls = List<String>.from(data['posts'] ?? []);
           _bioController.text = bio;
           loading = false;
