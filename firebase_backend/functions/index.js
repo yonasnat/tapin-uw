@@ -349,8 +349,18 @@ exports.joinEvent = onRequest(async (request, response) => {
     }
 
     try {
+      // Get the ID token from the Authorization header
+      const authHeader = request.headers.authorization;
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        response.status(401).send({message: "No authorization token provided"});
+        return;
+      }
+
+      const idToken = authHeader.split('Bearer ')[1];
+      const decodedToken = await admin.auth().verifyIdToken(idToken);
+      const userId = decodedToken.uid;
+
       const {eventId} = request.body;
-      const userId = request.auth.uid;
 
       // Get event document
       const eventRef = admin.firestore().collection("events").doc(eventId);
@@ -416,8 +426,18 @@ exports.leaveEvent = onRequest(async (request, response) => {
     }
 
     try {
+      // Get the ID token from the Authorization header
+      const authHeader = request.headers.authorization;
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        response.status(401).send({message: "No authorization token provided"});
+        return;
+      }
+
+      const idToken = authHeader.split('Bearer ')[1];
+      const decodedToken = await admin.auth().verifyIdToken(idToken);
+      const userId = decodedToken.uid;
+
       const {eventId} = request.body;
-      const userId = request.auth.uid;
 
       // Get event document
       const eventRef = admin.firestore().collection("events").doc(eventId);
@@ -445,6 +465,59 @@ exports.leaveEvent = onRequest(async (request, response) => {
       logger.error("Leave event error:", error);
       response.status(500).send({
         message: "Failed to leave event",
+        error: error.message,
+      });
+    }
+  });
+});
+
+/**
+ * CHECK EVENT PARTICIPATION - Checks if a user has joined an event
+ * Trigger: HTTP GET
+ * Required Parameters:
+ * - eventId (in URL path)
+ */
+exports.checkEventParticipation = onRequest(async (request, response) => {
+  return cors(request, response, async () => {
+    if (request.method !== "GET") {
+      response.status(405).send({error: "Only GET requests allowed"});
+      return;
+    }
+
+    try {
+      // Get the ID token from the Authorization header
+      const authHeader = request.headers.authorization;
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        response.status(401).send({message: "No authorization token provided"});
+        return;
+      }
+
+      const idToken = authHeader.split('Bearer ')[1];
+      const decodedToken = await admin.auth().verifyIdToken(idToken);
+      const userId = decodedToken.uid;
+
+      const eventId = request.path.split('/').pop();
+      if (!eventId) {
+        response.status(400).send({message: "Event ID is required"});
+        return;
+      }
+
+      // Check if user is a participant
+      const participantRef = admin.firestore()
+          .collection("events")
+          .doc(eventId)
+          .collection("participants")
+          .doc(userId);
+      
+      const participantDoc = await participantRef.get();
+
+      response.status(200).send({
+        isJoined: participantDoc.exists,
+      });
+    } catch (error) {
+      logger.error("Check event participation error:", error);
+      response.status(500).send({
+        message: "Failed to check event participation",
         error: error.message,
       });
     }
