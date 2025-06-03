@@ -127,59 +127,6 @@ exports.createUser = onRequest(async (request, response) => {
 });
 
 /**
- * LOGIN FUNCTION - Logs in a registered user and returns a token.
- *
- * Trigger: HTTP POST
- * Required Fields in body:
- * - email
- * - password
- */
-exports.loginUser = onRequest(async (request, response) => {
-  return cors(request, response, async () => {
-    if (request.method !== "POST") {
-      response.status(405).send({error: "Only POST requests allowed"});
-      return;
-    }
-
-    try {
-      const {email, password} = request.body;
-
-      if (!email || !password) {
-        response.status(400).send({message: "Email and password required."});
-        return;
-      }
-
-      // Get user data (Firebase Admin cannot verify password)
-      const userRecord = await admin.auth().getUserByEmail(email);
-
-      // Issue token and update Firestore login time
-      const token = await admin.auth().createCustomToken(userRecord.uid);
-      await admin.firestore().collection("users").doc(userRecord.uid).update({
-        lastLogin: admin.firestore.FieldValue.serverTimestamp(),
-      });
-
-      response.status(200).send({
-        message: "Login token issued.",
-        token,
-        user: {
-          uid: userRecord.uid,
-          email: userRecord.email,
-          displayName: userRecord.displayName,
-        },
-      });
-    } catch (error) {
-      logger.error("Login error:", error);
-
-      if (error.code === "auth/user-not-found") {
-        response.status(401).send({message: "User not found. Check email."});
-      } else {
-        response.status(500).send({message: "Login failed. Try again later."});
-      }
-    }
-  });
-});
-
-/**
  * CREATE EVENT FUNCTION - Creates a new event in Firestore
  * The event is created by the authenticated user who becomes the organizer.
  * Trigger: HTTP POST
