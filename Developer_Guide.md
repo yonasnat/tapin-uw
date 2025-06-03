@@ -75,7 +75,7 @@ Example: flutter test test/widget_test.dart
 ### Backend Testing
 **1. Navigate to Backend Directory**
 ```bash
-cd flutter_backend
+cd firebase_backend
 cd functions
 ```
 **To Run All Tests**
