@@ -28,13 +28,6 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
     _loadPotentialMatches();
   }
 
-
-
-
-
-
-
-
   Future<void> _loadPotentialMatches() async {
     setState(() => _isLoading = true);
 
@@ -96,12 +89,6 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
   }
 
 
-
-
-
-
-
-
   Future<void> _handleIgnore(int index) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -139,12 +126,6 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
       );
     }
   }
-
-
-
-
-
-
 
 
   Future<void> _handleSave(int index) async {
@@ -185,13 +166,6 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
     }
   }
 
-
-
-
-
-
-
-
   Widget _buildNoMatchesMessage() {
     return Center(
       child: Padding(
@@ -204,13 +178,6 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
       ),
     );
   }
-
-
-
-
-
-
-
 
   Widget _buildMatchCard(Map<String, dynamic> match, int index) {
     return Card(
@@ -228,10 +195,10 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
               children: [
                 CircleAvatar(
                   radius: 40,
-                  backgroundImage: match['photoURL'] != null && match['photoURL'] != ''
-                      ? NetworkImage(match['photoURL'])
+                  backgroundImage: match['profilePicUrl'] != null && match['profilePicUrl'] != ''
+                      ? NetworkImage(match['profilePicUrl'])
                       : null,
-                  child: (match['photoURL'] == null || match['photoURL'] == '')
+                  child: (match['profilePicUrl'] == null || match['profilePicUrl'] == '')
                       ? const Icon(Icons.person, size: 40)
                       : null,
                 ),
@@ -353,13 +320,6 @@ class _MatchmakingScreenState extends State<MatchmakingScreen> {
       ),
     );
   }
-
-
-
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
