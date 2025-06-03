@@ -24,7 +24,7 @@ cd tapin-uw
 ### Frontend (Flutter)
 **1. Build the Flutter Frontend**
 ```bash
-https://docs.flutter.dev/get-started/install/macos/web
+https://docs.flutter.dev/get-started/install
 ```
 **2. Fetch Dependencies**
 ```bash
