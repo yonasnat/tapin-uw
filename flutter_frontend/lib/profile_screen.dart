@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
 
+// profile screen for viewing and editing user profile data
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -16,11 +17,13 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  //theme colors
   static const _uwPurple = Color(0xFF7D3CFF);
   static const _beige = Color(0xFFF5D598);
   static const _white = Color(0xFFFFFFFF);
   static const _black = Color(0xFF000000);
 
+  // stating variables
   String name = '';
   String bio = '';
   String? profilePicUrl;
@@ -29,6 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool loading = true;
   bool uploading = false;
 
+  //controller for the bio text field
   final TextEditingController _bioController = TextEditingController();
 
   @override
@@ -37,6 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     fetchProfileData();
   }
 
+  //fetches user profile data from Firestore
   Future<void> fetchProfileData() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
@@ -62,6 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  //updates user's bio in Firestore
   Future<void> updateBio() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
@@ -82,6 +88,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  //upload profile picture
   Future<void> uploadProfilePicture() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -138,7 +145,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       });
 
       _showSuccessSnackBar('Profile picture updated successfully');
-      print("✅ Profile picture uploaded: $url");
+      print("Profile picture uploaded: $url");
     } catch (e) {
       setState(() => uploading = false);
       print('Error uploading profile picture: $e');
@@ -146,6 +153,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  //upload new post
   Future<void> uploadPost() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -204,7 +212,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       });
 
       _showSuccessSnackBar('Post uploaded successfully');
-      print("✅ Post uploaded: $url");
+      print("Post uploaded: $url");
     } catch (e) {
       setState(() => uploading = false);
       print('Error uploading post: $e');
@@ -212,6 +220,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  //snackbars
   void _showSuccessSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message), backgroundColor: Colors.green),
@@ -223,7 +232,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       SnackBar(content: Text(message), backgroundColor: Colors.red),
     );
   }
-
+  
+//UI components
   Widget _buildProfileHeader() {
     return Column(
       children: [
@@ -355,6 +365,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  //main build method
   @override
   Widget build(BuildContext context) {
     return Scaffold(
