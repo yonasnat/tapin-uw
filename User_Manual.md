@@ -32,10 +32,9 @@ By offering a verified UW-only platform, TapIn@UW fosters a safer and more inten
 ```bash
 curl -sL https://firebase.tools | bash
 ``` 
-**5. Follow instructions to create an account and setup Firebase here:**
-```bash
-[curl -sL https://firebase.tools | bash](https://firebase.google.com/docs/flutter/setup?platform=ios)
-```
+**5. Follow instructions to create an account and setup Firebase:**
+[Link Here](https://firebase.google.com/docs/flutter/setup?platform=ios)
+
 - The Firebase Packages/Versions:
 -   firebase_core: ^2.27.0
 -   firebase_auth: ^4.17.4
@@ -70,6 +69,10 @@ source ~/.zshrc
 flutterfire --version
 flutterfire configure
 ```
+- If encountering errors related to .xcodeproj during Firebase configuration, install the xcodeproj gem then rerun the previous flutterfire command:
+  ```bash
+  sudo gem install xcodeproj
+
 - Select: tapin-uw (TapIn-UW)
 - Select: web (for which configuration to configure with)
 **6. Start the App**
