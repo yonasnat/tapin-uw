@@ -9,6 +9,7 @@ class EventService {
   static const String _createEventUrl = 'https://createevent-ybcbaxrbca-uc.a.run.app';
   static const String _joinEventUrl = 'https://joinevent-ybcbaxrbca-uc.a.run.app';
   static const String _leaveEventUrl = 'https://leaveevent-ybcbaxrbca-uc.a.run.app';
+  static const String _checkParticipationUrl = 'https://checkeventparticipation-ybcbaxrbca-uc.a.run.app';
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -129,6 +130,43 @@ class EventService {
     } catch (e) {
       print('Error leaving event: $e');
       rethrow;
+    }
+  }
+
+  Future<Set<String>> getJoinedEvents() async {
+    try {
+      final token = await _getIdToken();
+      if (token == null) throw Exception('Not authenticated');
+
+      final user = _auth.currentUser;
+      if (user == null) throw Exception('Not authenticated');
+
+      // Get all events
+      final events = await getEvents();
+      
+      // For each event, check if the user is a participant
+      final joinedEvents = <String>{};
+      for (final event in events) {
+        final response = await http.get(
+          Uri.parse('$_checkParticipationUrl/${event.id}'),
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+        );
+
+        if (response.statusCode == 200) {
+          final data = json.decode(response.body);
+          if (data['isJoined'] == true) {
+            joinedEvents.add(event.id);
+          }
+        }
+      }
+
+      return joinedEvents;
+    } catch (e) {
+      print('Error getting joined events: $e');
+      return {};
     }
   }
 } 

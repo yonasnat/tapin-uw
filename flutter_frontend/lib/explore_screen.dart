@@ -21,6 +21,7 @@ class EventsPage extends StatefulWidget {
 class _EventsPageState extends State<EventsPage> {
   final EventService _eventService = EventService();
   List<Event> _events = [];
+  Set<String> _joinedEventIds = {};
   bool _isLoading = true;
   String? _error;
   String? _lastDocId;
@@ -51,10 +52,21 @@ class _EventsPageState extends State<EventsPage> {
         startAfter: _lastDocId,
       );
 
+      // Load joined events status
+      final joinedEvents = await _eventService.getJoinedEvents();
+      
       setState(() {
-        _events.addAll(events);
+        if (refresh) {
+          _events = events;
+        } else {
+          // Add only new events that aren't already in the list
+          final existingIds = _events.map((e) => e.id).toSet();
+          final newEvents = events.where((e) => !existingIds.contains(e.id)).toList();
+          _events.addAll(newEvents);
+        }
+        _joinedEventIds = joinedEvents;
         _lastDocId = events.isNotEmpty ? events.last.id : null;
-        _hasMore = events.length == 10; // If we got less than 10, we've reached the end
+        _hasMore = events.length == 10;
         _isLoading = false;
       });
     } catch (e) {
@@ -68,6 +80,9 @@ class _EventsPageState extends State<EventsPage> {
   Future<void> _joinEvent(String eventId) async {
     try {
       await _eventService.joinEvent(eventId);
+      setState(() {
+        _joinedEventIds.add(eventId);
+      });
       // Refresh the events list to update participant count
       await _loadEvents(refresh: true);
       if (mounted) {
@@ -79,6 +94,28 @@ class _EventsPageState extends State<EventsPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to join event: $e')),
+        );
+      }
+    }
+  }
+
+  Future<void> _unjoinEvent(String eventId) async {
+    try {
+      await _eventService.leaveEvent(eventId);
+      setState(() {
+        _joinedEventIds.remove(eventId);
+      });
+      // Refresh the events list to update participant count
+      await _loadEvents(refresh: true);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Successfully left event')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to leave event: $e')),
         );
       }
     }
@@ -120,6 +157,8 @@ class _EventsPageState extends State<EventsPage> {
           return _EventCard(
                         event: event,
                         onJoin: () => _joinEvent(event.id),
+                        onUnjoin: () => _unjoinEvent(event.id),
+                        isJoined: _joinedEventIds.contains(event.id),
           );
         },
       ),
@@ -140,10 +179,14 @@ class _EventCard extends StatelessWidget {
   const _EventCard({
     required this.event,
     required this.onJoin,
+    required this.onUnjoin,
+    required this.isJoined,
   });
 
   final Event event;
   final VoidCallback onJoin;
+  final VoidCallback onUnjoin;
+  final bool isJoined;
 
   @override
   Widget build(BuildContext context) {
@@ -211,17 +254,20 @@ class _EventCard extends StatelessWidget {
                     style: const TextStyle(color: AppColors.navy),
                   ),
                   TextButton(
-                  style: TextButton.styleFrom(
-                      foregroundColor: AppColors.navy,
-                    backgroundColor: Colors.white,
-                    minimumSize: const Size(80, 32),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                        side: const BorderSide(color: AppColors.navy, width: .8),
+                    style: TextButton.styleFrom(
+                      foregroundColor: isJoined ? Colors.red : AppColors.navy,
+                      backgroundColor: Colors.white,
+                      minimumSize: const Size(80, 32),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        side: BorderSide(
+                          color: isJoined ? Colors.red : AppColors.navy,
+                          width: .8,
+                        ),
                       ),
                     ),
-                    onPressed: onJoin,
-                    child: const Text('Join'),
+                    onPressed: isJoined ? onUnjoin : onJoin,
+                    child: Text(isJoined ? 'Unjoin' : 'Join'),
                   ),
                 ],
               ),
