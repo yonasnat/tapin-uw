@@ -7,7 +7,12 @@ void main() {
     // Build our widget
     await tester.pumpWidget(const MaterialApp(home: FilterScreen()));
 
-    // Verify that the app bar title is correct
-    expect(find.text('Filter'), findsOneWidget);
+    // Find the AppBar and verify its title
+    final appBarFinder = find.byType(AppBar);
+    expect(appBarFinder, findsOneWidget);
+    
+    final appBar = tester.widget<AppBar>(appBarFinder);
+    expect(appBar.title, isA<Text>());
+    expect((appBar.title as Text).data, 'Filter');
   });
 } 
