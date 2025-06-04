@@ -17,15 +17,17 @@ Future<void> setupFirebaseForTesting() async {
   // Setup Firebase mocks
   setupFirebaseCoreMocks();
   
-  // Initialize Firebase with test configuration
-  await Firebase.initializeApp(
-    options: const FirebaseOptions(
-      apiKey: 'test-api-key',
-      appId: 'test-app-id',
-      messagingSenderId: 'test-sender-id',
-      projectId: 'test-project-id',
-    ),
-  );
+  // Only initialize if not already initialized
+  if (Firebase.apps.isEmpty) {
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+        apiKey: 'test-api-key',
+        appId: 'test-app-id',
+        messagingSenderId: 'test-sender-id',
+        projectId: 'test-project-id',
+      ),
+    );
+  }
 }
 
 // Helper widget to wrap test widgets with necessary providers
