@@ -1,9 +1,34 @@
+/**
+ * Profile Management Cloud Functions for TapIn@UW
+ * Handles user profile data retrieval and photo management
+ */
+
 const { onRequest } = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
 const admin = require("firebase-admin");
 const cors = require("cors")({ origin: true });
 
-// GET /getUserProfile?uid=abc123
+/**
+ * Retrieves a user's profile information from Firestore
+ * 
+ * Endpoint: GET /getUserProfile
+ * Query Parameters:
+ *   - uid: The user's unique identifier
+ * 
+ * Returns:
+ *   - 200: User profile data including:
+ *     - uid: User ID
+ *     - displayName: User's display name
+ *     - username: User's username
+ *     - bio: User's biography
+ *     - interests: Array of user's interests
+ *     - createdAt: Account creation timestamp
+ *     - photoUrls: Array of user's photo URLs
+ *   - 400: Missing uid parameter
+ *   - 404: User not found
+ *   - 405: Invalid HTTP method
+ *   - 500: Server error
+ */
 exports.getUserProfile = onRequest(async (request, response) => {
   return cors(request, response, async () => {
     if (request.method !== "GET") {
@@ -46,7 +71,22 @@ exports.getUserProfile = onRequest(async (request, response) => {
   });
 });
 
-// GET /getUserPhotos?uid=abc123
+/**
+ * Retrieves all photos associated with a user from Firebase Storage
+ * 
+ * Endpoint: GET /getUserPhotos
+ * Query Parameters:
+ *   - uid: The user's unique identifier
+ * 
+ * Returns:
+ *   - 200: Array of signed URLs for user's photos
+ *   - 400: Missing uid parameter
+ *   - 405: Invalid HTTP method
+ *   - 500: Server error
+ * 
+ * Note: Photos are stored in the path 'users/{uid}/photos/' in Firebase Storage
+ * and are returned as signed URLs valid until 2500-03-01
+ */
 exports.getUserPhotos = onRequest(async (request, response) => {
   return cors(request, response, async () => {
     if (request.method !== "GET") {

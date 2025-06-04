@@ -1,20 +1,35 @@
+/**
+ * User Filter Management Cloud Function for TapIn@UW
+ * Handles saving and updating user preference filters in Firestore
+ */
+
 const { onRequest } = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
 const admin = require("firebase-admin");
 const cors = require("cors")({ origin: true });
 
-
 /**
- * POST /saveUserFilters
- * Body JSON:
+ * Saves or updates a user's preference filters in Firestore
+ * 
+ * Endpoint: POST /saveUserFilters
+ * 
+ * Request Body:
  *   {
- *     "uid": "abc123",
- *     "filters": {
- *       "Computer Science Major": true,
- *       "Artist": false,
+ *     "uid": "string",      // User's unique identifier
+ *     "filters": {          // Object containing filter preferences
+ *       "filterName": boolean,  // Key-value pairs of filter names and their states
  *       ...
  *     }
  *   }
+ * 
+ * Returns:
+ *   - 200: Success message
+ *   - 400: Invalid or missing parameters
+ *   - 405: Invalid HTTP method
+ *   - 500: Server error
+ * 
+ * Note: This function merges the new filters with existing user data
+ * and updates the filtersUpdatedAt timestamp
  */
 exports.saveUserFilters = onRequest(async (req, res) => {
   return cors(req, res, async () => {
