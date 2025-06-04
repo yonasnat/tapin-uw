@@ -43,4 +43,14 @@ Developer Documentation: [Developer Documentation](https://github.com/yonasnat/t
 Operation Use Case(s):
 1. User account creation with UW credentials
 2. User account log in (after account creation)
+3. Set up filters for the user account
+4. View and join events on explore page
+5. Post events to explore page
+6. View matches on matchmaking page
+7. Ignore or send requests to matches
+8. Customize profile (picture, bio, create posts)
+
+Incomplete/Ignored Feature(s):
+1. Messaging system between users
+2. AI recommendations for profile customization
 
