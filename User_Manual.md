@@ -90,12 +90,12 @@ flutter run
 -   Tap Profile in the bottom navigation.
 -   Add a photo, bio, major, courses, and personal interests (tags).
 -   Tap Save to update your information.
-### 3. Creating & Sharing Events(Work in progress)
+### 3. Creating & Sharing Events
 - Tap the + Post icon in Explore.
 - Fill in event details:
 -   Title & Description
 -   Date & Time picker
-### 4. Filters & Matchmaking(Work in progress)
+### 4. Filters & Matchmaking
 - Filters:
 -   Navigate to Filters (in Explore).
 -   Toggle categories and set date ranges.
