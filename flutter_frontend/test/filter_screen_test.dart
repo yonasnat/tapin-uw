@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tapin/filter_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'test_helpers.dart';
 
 void main() {
+  setupFirebaseMocks();
+
   testWidgets('FilterScreen has correct title', (WidgetTester tester) async {
     // Build our widget
     await tester.pumpWidget(const MaterialApp(home: FilterScreen()));
