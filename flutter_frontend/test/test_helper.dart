@@ -1,9 +1,21 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core_platform_interface/test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mock_exceptions/mock_exceptions.dart';
+import 'package:mockito/mockito.dart';
+import 'package:mockito/annotations.dart';
+import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart';
+
+// Generate mocks
+@GenerateMocks([FirebaseApp])
+import 'test_helper.mocks.dart';
 
 Future<void> setupFirebaseForTesting() async {
   TestWidgetsFlutterBinding.ensureInitialized();
+  
+  // Setup Firebase mocks
+  setupFirebaseCoreMocks();
   
   // Initialize Firebase with test configuration
   await Firebase.initializeApp(
