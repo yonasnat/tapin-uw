@@ -68,7 +68,6 @@ jobs:
   firebase-deploy:
     name: Deploy Firebase Functions
     needs: flutter-tests
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     
     defaults:
