@@ -5,7 +5,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class FilterScreen extends StatefulWidget {
-  const FilterScreen({super.key});
+  final FirebaseAuth auth;
+  final FirebaseFirestore firestore;
+
+  const FilterScreen({
+    Key? key,
+    required this.auth,
+    required this.firestore,
+  }) : super(key: key);
 
   @override
   State<FilterScreen> createState() => _FilterScreenState();
@@ -41,11 +48,11 @@ class _FilterScreenState extends State<FilterScreen> {
   }
 
   Future<void> _loadSavedFilters() async {
-    final user = FirebaseAuth.instance.currentUser;
+    final user = widget.auth.currentUser;
     if (user == null) return;
 
     try {
-      final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      final doc = await widget.firestore.collection('users').doc(user.uid).get();
       final data = doc.data();
       if (data != null && data['filters'] != null) {
         final savedFilters = List<String>.from(data['filters']);
@@ -76,7 +83,7 @@ class _FilterScreenState extends State<FilterScreen> {
   }
 
   void _onSave() async {
-    final user = FirebaseAuth.instance.currentUser;
+    final user = widget.auth.currentUser;
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('You must be logged in to save filters')),
@@ -92,7 +99,7 @@ class _FilterScreenState extends State<FilterScreen> {
           .toList();
 
       // Save to Firestore
-      await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+      await widget.firestore.collection('users').doc(user.uid).update({
         'filters': enabledFilters,
       });
 

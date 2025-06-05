@@ -194,7 +194,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         if (!mounted) return;
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const FilterScreen()),
+          MaterialPageRoute(builder: (context) => FilterScreen(
+            auth: FirebaseAuth.instance,
+            firestore: FirebaseFirestore.instance,
+          )),
         );
       } else {
         // Handle error response
